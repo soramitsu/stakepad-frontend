@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export const useAccountsStore = defineStore("accounts", () => {
   const wallet = ref({
-    accounts: [],
+    accounts: [] as string[],
   });
 
   return {
