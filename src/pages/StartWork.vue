@@ -20,20 +20,13 @@
         v-else
         class="h-[150px] flex flex-col text-center justify-between items-center"
       >
-        <p>
-          Connected as
-          <n-text type="success" class="cursor-pointer">{{
-            wallet.accounts[0]
-          }}</n-text>
-        </p>
+        <p>Connected</p>
         <NSpin />
       </div>
     </n-card>
 
     <n-card v-if="!isLoading" hoverable class="w-[300px]">
-      <div
-        class="flex flex-col text-center h-[200px] justify-between"
-      >
+      <div class="flex flex-col text-center h-[200px] justify-between">
         <WalletConnectIcon />
         <n-button
           class="relative mt-[24px]"
@@ -48,14 +41,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { NCard, NButton, NSpin, NText } from "naive-ui";
+import { NCard, NButton, NSpin } from "naive-ui";
 import { useAccountsStore } from "@/stores/accounts";
 import { useMetamask } from "@/composables/useMetamask";
 import MetamaskIcon from "@/assets/icons/metamask.svg";
 import WalletConnectIcon from "@/assets/icons/walletconnect.svg";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5'
+import { createWeb3Modal, defaultConfig } from "@web3modal/ethers5";
 
 const accountsStore = useAccountsStore();
 const { wallet, handleConnect } = useMetamask();
@@ -77,41 +70,41 @@ const connectMetamask = async () => {
 const connectWalletConnect = () => {
   const mainnet = {
     chainId: 1,
-    name: 'Ethereum',
-    currency: 'ETH',
-    explorerUrl: 'https://etherscan.io',
-    rpcUrl: 'https://cloudflare-eth.com'
-  }
+    name: "Ethereum",
+    currency: "ETH",
+    explorerUrl: "https://etherscan.io",
+    rpcUrl: "https://cloudflare-eth.com",
+  };
 
   const metadata = {
-    name: 'Stakepad',
-    description: '',
-    url: '',
+    name: "Stakepad",
+    description: "",
+    url: "",
     icons: [],
-  }
+  };
 
   const ethersConfig = defaultConfig({
     /*Required*/
     metadata,
-  })
+  });
 
   const modal = createWeb3Modal({
     ethersConfig,
     chains: [mainnet],
-    projectId: '6254c63a50dd8ca1c162b5e0dd5b36b5',
+    projectId: "6254c63a50dd8ca1c162b5e0dd5b36b5",
     enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    enableOnramp: true // Optional - false as default
-  })
-  
-  modal.subscribeEvents(event => {
-    if (event.data.event === 'MODAL_CLOSE') {
-      accountsStore.wallet = {accounts: [modal.getAddress() as string]};
+    enableOnramp: true, // Optional - false as default
+  });
+
+  modal.subscribeEvents((event) => {
+    if (event.data.event === "MODAL_CLOSE") {
+      accountsStore.wallet = { accounts: [modal.getAddress() as string] };
       isLoading.value = true;
       setTimeout(() => {
         router.push("/select");
-      }, 1000);
+      }, 100);
     }
-  })
-  modal.open()
-}
+  });
+  modal.open();
+};
 </script>

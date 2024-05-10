@@ -5,8 +5,7 @@ import SelectOption from "../pages/SelectOption.vue";
 import CreatePool from "../pages/CreatePool.vue";
 import StakingPools from "../pages/StakingPools.vue";
 import DisplayPool from "../pages/DisplayPool.vue";
-import DashboardStakingPools from "../pages/dashboard/DashboardStakingPools.vue";
-import DashboardDisplayPool from "../pages/dashboard/DashboardDisplayPool.vue";
+import TestPage from "@/pages/TestPage.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -14,8 +13,7 @@ const routes = [
   { path: "/create", component: CreatePool },
   { path: "/pools", component: StakingPools },
   { path: "/pool/:id", component: DisplayPool },
-  { path: "/dashboard/pools", component: DashboardStakingPools },
-  { path: "/dashboard/pool/:id", component: DashboardDisplayPool },
+  { path: "/test", component: TestPage },
 ];
 
 export const router = createRouter({

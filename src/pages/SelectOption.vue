@@ -22,6 +22,17 @@
           </div>
         </n-card>
       </div>
+
+      <div class="cursor-pointer" @click="$router.push('/test')">
+        <n-card hoverable embedded class="w-[200px] h-[200px]">
+          <div class="flex flex-col text-center justify-between items-center">
+            <n-h2> Test </n-h2>
+            <n-icon :size="60" color="#2F2FA2" class="mt-6">
+              <BookCoins20Regular />
+            </n-icon>
+          </div>
+        </n-card>
+      </div>
     </n-space>
   </div>
 </template>
