@@ -2,6 +2,7 @@ import { useMutation, useQuery, useSubscription } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 import { ref, watch } from "vue";
 
+// Wrapper for three of the main ways of communicating with the GraphQL node
 export class GraphWrapper {
   getQuery(
     name: string,

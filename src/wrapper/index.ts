@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import BN from "bignumber.js";
 
+// Basic wrapper for the ethers.js integration
 export class EthersWrapper {
   async getProvider(url: string) {
     return new ethers.providers.JsonRpcProvider(url);
@@ -52,13 +53,6 @@ export class EthersWrapper {
   }
 
   async sendTransactionMetamask(to: string, from: string, amount: string) {
-    console.log({
-          to,
-          from,
-          gas: "0x76c0",
-          value: Number(amount).toString(16),
-          gasPrice: "0x4a817c800",
-        })
     const res = await window.ethereum.request({
       method: "eth_sendTransaction",
       params: [
@@ -71,7 +65,6 @@ export class EthersWrapper {
         },
       ],
     });
-    console.log(res)
   }
 
   signMessage(provider: ethers.providers.JsonRpcProvider, message: string) {

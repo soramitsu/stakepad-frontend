@@ -53,9 +53,6 @@
         <n-card hoverable embedded class="w-[200px] h-[200px]">
           <div class="flex flex-col text-center justify-between items-center">
             <n-h2> Claim </n-h2>
-            <n-icon :size="60" color="#2F2FA2" class="mt-6">
-              <WidgetsOutlined />
-            </n-icon>
           </div>
         </n-card>
       </div>
@@ -64,9 +61,6 @@
         <n-card hoverable embedded class="w-[200px] h-[200px]">
           <div class="flex flex-col text-center justify-between items-center">
             <n-h2> Stake </n-h2>
-            <n-icon :size="60" color="#2F2FA2" class="mt-6">
-              <AddChartFilled />
-            </n-icon>
           </div>
         </n-card>
       </div>
@@ -75,9 +69,6 @@
         <n-card hoverable embedded class="w-[200px] h-[200px]">
           <div class="flex flex-col text-center justify-between items-center">
             <n-h2> Withdraw </n-h2>
-            <n-icon :size="60" color="#2F2FA2" class="mt-6">
-              <MergeTypeSharp />
-            </n-icon>
           </div>
         </n-card>
       </div>
@@ -96,14 +87,8 @@ import {
   NStatistic,
   NCard,
   NH2,
-  NIcon,
 } from "naive-ui";
 import { useRoute } from "vue-router";
-import {
-  AddChartFilled,
-  MergeTypeSharp,
-  WidgetsOutlined,
-} from "@vicons/material";
 
 const poolsStore = usePoolsStore();
 const route = useRoute();

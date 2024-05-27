@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import detectEthereumProvider from "@metamask/detect-provider";
 
+// Metamask compose for getting the access to the user's accounts addresses
 export const useMetamask = () => {
   const hasProvider = ref(false);
   const wallet = ref({
@@ -19,11 +20,10 @@ export const useMetamask = () => {
   };
 
   const handleConnect = async () => {
-    let accounts = await window.ethereum.request({
+    const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     updateWallet(accounts);
-    console.log(wallet.value);
   };
 
   return {
