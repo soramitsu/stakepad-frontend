@@ -1,0 +1,53 @@
+{
+  "name": "staking-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore src",
+    "lint:fix": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.10.2",
+    "@metamask/detect-provider": "^2.0.0",
+    "@vue/apollo-composable": "^4.0.2",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@web3modal/ethers5": "^4.1.6",
+    "bignumber.js": "^4.0.4",
+    "chart.js": "^4.4.2",
+    "ethers": "^5.7.2",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "vue-chartjs": "^5.3.0",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.28",
+    "@vicons/fa": "^0.12.0",
+    "@vicons/fluent": "^0.12.0",
+    "@vicons/material": "^0.12.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "naive-ui": "^2.38.1",
+    "postcss": "^8.4.35",
+    "prettier": "3.2.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.6",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-svg-loader": "^5.1.0",
+    "vitest": "^1.4.0",
+    "vue-tsc": "^1.8.27"
+  }
+}
