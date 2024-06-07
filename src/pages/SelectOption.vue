@@ -1,5 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full bg-[#2F2FA2]">
+    <SModal>
+
+    </SModal>
     <n-space>
       <div class="cursor-pointer" @click="$router.push('/create')">
         <n-card hoverable embedded class="w-[200px] h-[200px]">
