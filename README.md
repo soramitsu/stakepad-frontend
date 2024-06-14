@@ -7,7 +7,6 @@ Stakepad is the Web3 platform that aims to be convenient and powerful tool for t
 - Manage an existing staking pool
 - View a statistics about the staking pool
 
-
 ## How to launch?
 
 1. Clone the repository

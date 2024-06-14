@@ -1,37 +1,37 @@
-import './SRadioBody.scss'
+import "./SRadioBody.scss";
 
-import type { FunctionalComponent, PropType } from 'vue'
-import { h, mergeProps } from 'vue'
-import type { RadioType, RadioSize } from './types'
-import { TYPOGRAPHY } from './const'
+import type { FunctionalComponent, PropType } from "vue";
+import { h, mergeProps } from "vue";
+import type { RadioType, RadioSize } from "./types";
+import { TYPOGRAPHY } from "./const";
 
 interface Props {
-  type: RadioType
-  size: RadioSize
-  labelId: string
-  descriptionId: string
+  type: RadioType;
+  size: RadioSize;
+  labelId: string;
+  descriptionId: string;
 }
 
 const SRadioBody: FunctionalComponent<Props> = (props, { attrs, slots }) => {
-  const tpg = TYPOGRAPHY[props.size]
+  const tpg = TYPOGRAPHY[props.size];
 
   return h(
-    'div',
+    "div",
     mergeProps(
       {
-        class: 's-radio-body',
-        'data-type': props.type,
-        'data-size': props.size,
-        'aria-labelledby': props.labelId,
-        'aria-describedby': props.descriptionId,
+        class: "s-radio-body",
+        "data-type": props.type,
+        "data-size": props.size,
+        "aria-labelledby": props.labelId,
+        "aria-describedby": props.descriptionId,
       },
       attrs,
     ),
     [
-      h('div', { class: 'flex space-x-2 items-center' }, [
+      h("div", { class: "flex space-x-2 items-center" }, [
         ...(slots.atom?.() ?? []),
         h(
-          'label',
+          "label",
           {
             id: props.labelId,
             class: tpg.label,
@@ -39,20 +39,20 @@ const SRadioBody: FunctionalComponent<Props> = (props, { attrs, slots }) => {
           slots.label?.(),
         ),
       ]),
-      props.type === 'bordered-with-description' &&
+      props.type === "bordered-with-description" &&
         h(
-          'div',
+          "div",
           {
             id: props.descriptionId,
-            class: [tpg.description, 's-radio-body__description'],
+            class: [tpg.description, "s-radio-body__description"],
           },
           slots.description?.(),
         ),
     ],
-  )
-}
+  );
+};
 
-SRadioBody.displayName = 'SRadioBody'
+SRadioBody.displayName = "SRadioBody";
 
 SRadioBody.props = {
   type: {
@@ -71,6 +71,6 @@ SRadioBody.props = {
     type: String,
     required: true,
   },
-}
+};
 
-export default SRadioBody
+export default SRadioBody;

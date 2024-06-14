@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import type { DatePickerApi } from '../DatePicker/api'
-import { useDatePickerApi } from '../DatePicker/api'
+import type { DatePickerApi } from "../DatePicker/api";
+import { useDatePickerApi } from "../DatePicker/api";
 
 interface Props {
-  value: string
-  options: string[]
+  value: string;
+  options: string[];
 }
 
-const state: DatePickerApi = useDatePickerApi()
+const state: DatePickerApi = useDatePickerApi();
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '00:00',
-})
+  value: "00:00",
+});
 
-const emit = defineEmits(['update:time'])
+const emit = defineEmits(["update:time"]);
 
 const updateTime = (e: any) => {
-  emit('update:time', e.target.textContent)
-}
+  emit("update:time", e.target.textContent);
+};
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const updateTime = (e: any) => {
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 .s-date-picker-time-panel {
   @apply flex flex-col items-center justify-start;
   overflow-y: scroll;
@@ -46,7 +46,7 @@ const updateTime = (e: any) => {
   grid-area: time;
   max-height: 342px;
 
-  scrollbar-color: theme.token-as-var('sys.color.border-primary') transparent;
+  scrollbar-color: theme.token-as-var("sys.color.border-primary") transparent;
   scrollbar-arrow-color: transparent;
   scrollbar-width: thin;
 
@@ -55,7 +55,10 @@ const updateTime = (e: any) => {
     padding: 1px 4px;
     width: 44px;
     height: 24px;
-    font-feature-settings: 'tnum' on, 'lnum' on, 'case' on;
+    font-feature-settings:
+      "tnum" on,
+      "lnum" on,
+      "case" on;
 
     &:last-child {
       margin-bottom: 0;
@@ -68,13 +71,13 @@ const updateTime = (e: any) => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: theme.token-as-var('sys.color.border-primary');
+    background: theme.token-as-var("sys.color.border-primary");
     border-radius: 2px;
   }
 
   .active {
-    background-color: theme.token-as-var('sys.color.primary');
-    color: theme.token-as-var('sys.color.util.surface');
+    background-color: theme.token-as-var("sys.color.primary");
+    color: theme.token-as-var("sys.color.util.surface");
     border-radius: 2px;
   }
 }

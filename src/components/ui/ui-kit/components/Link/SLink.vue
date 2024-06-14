@@ -1,28 +1,39 @@
 <script setup lang="ts">
-import { usePropTypeFilter } from '../../composables/prop-type-filter'
-import { IconBasicExternalLink24 } from '../icons'
-import { LINK_ICON_POSITION_VALUES, LINK_UNDERLINE_TYPE_VALUES } from './consts'
-import type { LinkIconPosition, LinkUnderlineType } from './types'
+import { usePropTypeFilter } from "../../composables/prop-type-filter";
+import { IconBasicExternalLink24 } from "../icons";
+import {
+  LINK_ICON_POSITION_VALUES,
+  LINK_UNDERLINE_TYPE_VALUES,
+} from "./consts";
+import type { LinkIconPosition, LinkUnderlineType } from "./types";
 
 const props = withDefaults(
   defineProps<{
-    underline?: LinkUnderlineType
-    iconPosition?: LinkIconPosition
-    icon?: boolean
-    tag?: string | object
+    underline?: LinkUnderlineType;
+    iconPosition?: LinkIconPosition;
+    icon?: boolean;
+    tag?: string | object;
   }>(),
   {
-    underline: 'solid',
-    iconPosition: 'right',
+    underline: "solid",
+    iconPosition: "right",
     icon: true,
-    tag: 'a',
+    tag: "a",
   },
-)
+);
 
-const propFilter = usePropTypeFilter(props)
+const propFilter = usePropTypeFilter(props);
 
-const definitelyUnderlineType = propFilter('underline', LINK_UNDERLINE_TYPE_VALUES, 'solid')
-const definitelyIconPosition = propFilter('iconPosition', LINK_ICON_POSITION_VALUES, 'right')
+const definitelyUnderlineType = propFilter(
+  "underline",
+  LINK_UNDERLINE_TYPE_VALUES,
+  "solid",
+);
+const definitelyIconPosition = propFilter(
+  "iconPosition",
+  LINK_ICON_POSITION_VALUES,
+  "right",
+);
 </script>
 
 <template>
@@ -39,25 +50,19 @@ const definitelyIconPosition = propFilter('iconPosition', LINK_ICON_POSITION_VAL
       <slot />
     </span>
     <template v-if="icon">
-      <slot
-        name="icon"
-        :class="'s-link__icon'"
-      >
-        <IconBasicExternalLink24
-          class="s-link__icon"
-          data-testid="icon"
-        />
+      <slot name="icon" :class="'s-link__icon'">
+        <IconBasicExternalLink24 class="s-link__icon" data-testid="icon" />
       </slot>
     </template>
   </component>
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 .s-link {
   @apply cursor-pointer inline-flex items-center text-status-info;
-  color: theme.token-as-var('sys.color.status.info');
+  color: theme.token-as-var("sys.color.status.info");
   $component: &;
 
   &:hover {

@@ -1,14 +1,14 @@
 <script lang="ts">
 export default {
   inheritAttrs: false,
-}
+};
 </script>
 
 <script setup lang="ts">
-import { computed, mergeProps, onScopeDispose, watch } from 'vue'
-import { useWrappedTransitionVisibility } from './util'
-import { usePopoverApi } from './api'
-import { eagerComputed, templateRef, unrefElement } from '@vueuse/core';
+import { computed, mergeProps, onScopeDispose, watch } from "vue";
+import { useWrappedTransitionVisibility } from "./util";
+import { usePopoverApi } from "./api";
+import { eagerComputed, templateRef, unrefElement } from "@vueuse/core";
 
 const props = defineProps({
   eager: Boolean,
@@ -20,30 +20,33 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-})
+});
 
-const api = usePopoverApi()
+const api = usePopoverApi();
 
-const { wrapperIf, wrapperShow, contentIf, contentShow, transitionProps } = useWrappedTransitionVisibility({
-  show: computed(() => api.show),
-  eager: computed(() => props.eager),
-})
+const { wrapperIf, wrapperShow, contentIf, contentShow, transitionProps } =
+  useWrappedTransitionVisibility({
+    show: computed(() => api.show),
+    eager: computed(() => props.eager),
+  });
 
 function onEnter() {
-  api.popper?.update()
+  api.popper?.update();
 }
 
-const wrapper = templateRef('wrapper')
-const wrapperNormalized = eagerComputed(() => unrefElement(wrapper as any) as null | HTMLDivElement)
+const wrapper = templateRef("wrapper");
+const wrapperNormalized = eagerComputed(
+  () => unrefElement(wrapper as any) as null | HTMLDivElement,
+);
 watch(wrapperNormalized, (el, oldEl) => {
-  if (oldEl) api.deletePopperRefOverride(oldEl)
-  if (el) api.addPopperRefOverride(el)
-})
+  if (oldEl) api.deletePopperRefOverride(oldEl);
+  if (el) api.addPopperRefOverride(el);
+});
 
 onScopeDispose(() => {
-  const el = wrapperNormalized.value
-  el && api.deletePopperRefOverride(el)
-})
+  const el = wrapperNormalized.value;
+  el && api.deletePopperRefOverride(el);
+});
 </script>
 
 <template>
@@ -53,15 +56,8 @@ onScopeDispose(() => {
     ref="wrapper"
     v-bind="wrapperAttrs"
   >
-    <Transition
-      v-bind="mergeProps($attrs, transitionProps)"
-      @enter="onEnter"
-    >
-      <span
-        v-if="contentIf"
-        v-show="contentShow"
-        v-bind="innerWrapperAttrs"
-      >
+    <Transition v-bind="mergeProps($attrs, transitionProps)" @enter="onEnter">
+      <span v-if="contentIf" v-show="contentShow" v-bind="innerWrapperAttrs">
         <slot />
       </span>
     </Transition>

@@ -1,58 +1,52 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { IconArrowsChevronRight24, IconArrowsChevronLeft24 } from '../icons'
+import { computed, ref } from "vue";
+import { IconArrowsChevronRight24, IconArrowsChevronLeft24 } from "../icons";
 
-const emit = defineEmits(['pick'])
+const emit = defineEmits(["pick"]);
 
 interface Props {
-  value: number
+  value: number;
 }
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {});
 
-const deltaDecade = ref(0)
+const deltaDecade = ref(0);
 
 const changeDecade = (delta: number) => {
-  deltaDecade.value += delta
-}
+  deltaDecade.value += delta;
+};
 
 const startYear = computed(() => {
-  return (Math.floor(props.value / 10) + deltaDecade.value) * 10
-})
+  return (Math.floor(props.value / 10) + deltaDecade.value) * 10;
+});
 
 const getCellStyle = (year: number) => {
   const style = {
     current: false,
     today: false,
-  }
-  const today = new Date()
-  style.current = year === props.value
-  style.today = today.getFullYear() === year
-  return style
-}
+  };
+  const today = new Date();
+  style.current = year === props.value;
+  style.today = today.getFullYear() === year;
+  return style;
+};
 const handleYearTableClick = (event: any) => {
-  const target = event.target
-  if (target.tagName === 'A') {
-    const year = target.textContent || target.innerText
-    emit('pick', Number(year))
+  const target = event.target;
+  if (target.tagName === "A") {
+    const year = target.textContent || target.innerText;
+    emit("pick", Number(year));
   }
-}
+};
 </script>
 
 <template>
   <div class="s-date-picker-year-table">
     <div class="sora-tpg-p2 s-date-picker-year-table__range-panel">
-      <button
-        type="button"
-        @click="changeDecade(-1)"
-      >
+      <button type="button" @click="changeDecade(-1)">
         <IconArrowsChevronLeft24 />
       </button>
       <p>{{ `${startYear} - ${startYear + 9}` }}</p>
-      <button
-        type="button"
-        @click="changeDecade(1)"
-      >
+      <button type="button" @click="changeDecade(1)">
         <IconArrowsChevronRight24 />
       </button>
     </div>
@@ -75,7 +69,7 @@ const handleYearTableClick = (event: any) => {
 </template>
 
 <style lang="scss" scoped>
-@use '@/theme';
+@use "../../theme";
 
 .s-date-picker-year-table {
   &__range-panel {
@@ -97,16 +91,16 @@ const handleYearTableClick = (event: any) => {
       cursor: pointer;
 
       &.today .cell {
-        color: theme.token-as-var('sys.color.primary');
+        color: theme.token-as-var("sys.color.primary");
         font-weight: 700;
       }
 
       & .cell:hover {
-        color: theme.token-as-var('sys.color.primary');
+        color: theme.token-as-var("sys.color.primary");
       }
 
       &.current .cell {
-        color: theme.token-as-var('sys.color.primary');
+        color: theme.token-as-var("sys.color.primary");
       }
     }
   }

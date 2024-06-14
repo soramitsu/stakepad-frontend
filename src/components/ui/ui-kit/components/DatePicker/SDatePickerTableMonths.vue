@@ -1,84 +1,82 @@
 <script setup lang="ts">
-import { computed, ref, type ComputedRef } from 'vue'
-import { IconArrowsChevronRight24, IconArrowsChevronLeft24 } from '../icons'
-import { months } from './consts'
+import { computed, ref, type ComputedRef } from "vue";
+import { IconArrowsChevronRight24, IconArrowsChevronLeft24 } from "../icons";
+import { months } from "./consts";
 
-import type { ShowState } from './types'
+import type { ShowState } from "./types";
 
 interface Props {
-  showState: ShowState
+  showState: ShowState;
 }
 
 interface MonthCellStyle {
-  current: boolean
-  today: boolean
+  current: boolean;
+  today: boolean;
 }
 
 interface MonthCell {
-  type: 'normal'
-  title: string
-  text: number
+  type: "normal";
+  title: string;
+  text: number;
 }
 
 const currentMonth = computed(() => {
-  return props.showState.month
-})
+  return props.showState.month;
+});
 
 const currentYear = computed(() => {
-  return props.showState.year
-})
+  return props.showState.year;
+});
 
 const changeYear = (delta: number) => {
-  deltaYear.value += delta
-}
+  deltaYear.value += delta;
+};
 
-const deltaYear = ref(0)
+const deltaYear = ref(0);
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {});
 
-const emit = defineEmits(['update:showed-year', 'pick'])
+const emit = defineEmits(["update:showed-year", "pick"]);
 
 const getCellStyle = (cell: MonthCell) => {
   const style: MonthCellStyle = {
     current: false,
     today: false,
-  }
-  const today = new Date()
-  const month = cell.text
+  };
+  const today = new Date();
+  const month = cell.text;
 
-  style.current = currentMonth.value === month && deltaYear.value === 0
-  style.today = today.getMonth() === month && today.getFullYear() === currentYear.value + deltaYear.value
-  return style
-}
+  style.current = currentMonth.value === month && deltaYear.value === 0;
+  style.today =
+    today.getMonth() === month &&
+    today.getFullYear() === currentYear.value + deltaYear.value;
+  return style;
+};
 const handleMonthTableClick = (event: any) => {
-  let target = event.target
-  const month = Number(target.getAttribute('month'))
-  emit('pick', month)
-  emit('update:showed-year', currentYear.value + deltaYear.value)
-}
+  let target = event.target;
+  const month = Number(target.getAttribute("month"));
+  emit("pick", month);
+  emit("update:showed-year", currentYear.value + deltaYear.value);
+};
 
 const gridCells: ComputedRef<MonthCell[]> = computed(() => {
   return months.map((monthName, idx) => {
-    const cell: MonthCell = { type: 'normal', title: monthName, text: idx }
-    return cell
-  })
-})
+    const cell: MonthCell = { type: "normal", title: monthName, text: idx };
+    return cell;
+  });
+});
 </script>
 
 <template>
   <div class="s-date-picker-month-table">
-    <div class="flex justify-between items-center sora-tpg-p2 s-date-picker-month-table__year-range-panel">
-      <button
-        type="button"
-        @click="changeYear(-1)"
-      >
+    <div
+      class="flex justify-between items-center sora-tpg-p2 s-date-picker-month-table__year-range-panel"
+    >
+      <button type="button" @click="changeYear(-1)">
         <IconArrowsChevronLeft24 />
       </button>
       <p>{{ currentYear + deltaYear }}</p>
-      <button
-        type="button"
-        @click="changeYear(1)"
-      >
+      <button type="button" @click="changeYear(1)">
         <IconArrowsChevronRight24 />
       </button>
     </div>
@@ -93,10 +91,7 @@ const gridCells: ComputedRef<MonthCell[]> = computed(() => {
         :class="getCellStyle(cell)"
       >
         <div>
-          <a
-            class="cell"
-            :month="cell.text"
-          >{{ `${months[cell.text]}` }}</a>
+          <a class="cell" :month="cell.text">{{ `${months[cell.text]}` }}</a>
         </div>
       </div>
     </div>
@@ -104,7 +99,7 @@ const gridCells: ComputedRef<MonthCell[]> = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@use '@/theme';
+@use "../../theme";
 
 .s-date-picker-month-table {
   &__year-range-panel {
@@ -134,28 +129,28 @@ const gridCells: ComputedRef<MonthCell[]> = computed(() => {
       &.today {
         & .end-date .cell,
         &.start-date .cell {
-          color: theme.token-as-var('sys.color.util.surface');
+          color: theme.token-as-var("sys.color.util.surface");
         }
       }
 
       &.current:not(.disabled) .cell {
-        color: theme.token-as-var('sys.color.primary');
+        color: theme.token-as-var("sys.color.primary");
       }
 
       &.today .cell {
-        color: theme.token-as-var('sys.color.primary');
+        color: theme.token-as-var("sys.color.primary");
         font-weight: 700;
       }
 
       & .cell {
         display: block;
         line-height: 36px;
-        color: theme.token-as-var('sys.color.content-primary');
+        color: theme.token-as-var("sys.color.content-primary");
         margin: 0 auto;
         border-radius: 18px;
 
         &:hover {
-          color: theme.token-as-var('sys.color.primary');
+          color: theme.token-as-var("sys.color.primary");
         }
       }
     }

@@ -11,6 +11,11 @@ export class EthersWrapper {
     return provider.getSigner();
   }
 
+  async getSymbol (abi: any, contractAddress: string, provider: any) {
+    const contract = new ethers.Contract(contractAddress, abi, provider)
+    return contract.symbol()
+  }
+
   async getMetamaskProvider() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     await provider.send("eth_requestAccounts", []);

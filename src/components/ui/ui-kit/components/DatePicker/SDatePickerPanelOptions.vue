@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import type { DatePickerOptions, PossiblePresetOption } from './types'
-import { IconBasicCheckMark24 } from '@/components/icons'
-import type { DatePickerApi } from './api'
-import { useDatePickerApi } from './api'
+import type { DatePickerOptions, PossiblePresetOption } from "./types";
+import { IconBasicCheckMark24 } from "../../components/icons";
+import type { DatePickerApi } from "./api";
+import { useDatePickerApi } from "./api";
 
 interface Props {
-  menuState: string
-  options: DatePickerOptions
+  menuState: string;
+  options: DatePickerOptions;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const emit = defineEmits(['click:option'])
+const emit = defineEmits(["click:option"]);
 
-const state: DatePickerApi = useDatePickerApi()
+const state: DatePickerApi = useDatePickerApi();
 
 const onMenuClick = (data: PossiblePresetOption) => {
-  emit('click:option', data)
-}
+  emit("click:option", data);
+};
 </script>
 
 <template>
@@ -34,18 +34,19 @@ const onMenuClick = (data: PossiblePresetOption) => {
       <span
         v-show="menuState === item.label"
         class="s-date-picker-options-panel__checkmark"
-      ><IconBasicCheckMark24 /></span>
+        ><IconBasicCheckMark24
+      /></span>
     </p>
   </div>
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 .s-date-picker-options-panel {
   @apply flex flex-col justify-start;
   grid-area: options;
-  border-right: 1px solid theme.token-as-var('sys.color.border-primary');
+  border-right: 1px solid theme.token-as-var("sys.color.border-primary");
 
   &__item {
     padding: 10px 16px;
@@ -53,10 +54,10 @@ const onMenuClick = (data: PossiblePresetOption) => {
     position: relative;
     width: 150px;
     &:hover {
-      background-color: theme.token-as-var('sys.color.background-hover');
+      background-color: theme.token-as-var("sys.color.background-hover");
     }
     &.active {
-      background-color: theme.token-as-var('sys.color.background-hover');
+      background-color: theme.token-as-var("sys.color.background-hover");
     }
   }
 

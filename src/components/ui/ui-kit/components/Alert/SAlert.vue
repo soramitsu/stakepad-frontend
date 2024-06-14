@@ -1,39 +1,36 @@
 <script setup lang="ts">
-import { IconClose, STATUS_ICONS_MAP } from '../icons'
-import { Status } from '../../types'
-import { shallowRef, watchSyncEffect, type Component } from 'vue'
+import { IconClose, STATUS_ICONS_MAP } from "../icons";
+import { Status } from "../../types";
+import { shallowRef, watchSyncEffect, type Component } from "vue";
 
 interface Props {
-  inline?: boolean
-  status?: Status
-  showCloseBtn?: boolean
-  title?: string
-  description?: string
+  inline?: boolean;
+  status?: Status;
+  showCloseBtn?: boolean;
+  title?: string;
+  description?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   status: Status.Info,
   showCloseBtn: false,
-})
+});
 
-const emit = defineEmits<(event: 'click:close') => void>()
+const emit = defineEmits<(event: "click:close") => void>();
 
-const StatusIcon = shallowRef<Component>()
+const StatusIcon = shallowRef<Component>();
 
 watchSyncEffect(() => {
-  StatusIcon.value = STATUS_ICONS_MAP[props.status]
-})
+  StatusIcon.value = STATUS_ICONS_MAP[props.status];
+});
 
 function onClickClose() {
-  emit('click:close')
+  emit("click:close");
 }
 </script>
 
 <template>
-  <div
-    :class="['s-alert', { 's-alert_inline': inline }]"
-    :data-status="status"
-  >
+  <div :class="['s-alert', { 's-alert_inline': inline }]" :data-status="status">
     <div class="s-alert__icon-wrapper">
       <component :is="StatusIcon" />
     </div>
@@ -52,14 +49,8 @@ function onClickClose() {
       </div>
     </div>
 
-    <div
-      v-if="showCloseBtn"
-      class="s-alert__close-wrapper"
-    >
-      <button
-        data-testid="close-btn"
-        @click="onClickClose"
-      >
+    <div v-if="showCloseBtn" class="s-alert__close-wrapper">
+      <button data-testid="close-btn" @click="onClickClose">
         <IconClose />
       </button>
     </div>
@@ -67,23 +58,23 @@ function onClickClose() {
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 .s-alert {
   @apply rounded border border-solid;
   @apply px-6 py-4;
   @apply flex space-x-4;
 
-  @each $status in ('info', 'warning', 'success', 'error') {
-    $bg: theme.token-as-var('sys.color.status.#{$status}-background');
-    $fg: theme.token-as-var('sys.color.status.#{$status}');
+  @each $status in ("info", "warning", "success", "error") {
+    $bg: theme.token-as-var("sys.color.status.#{$status}-background");
+    $fg: theme.token-as-var("sys.color.status.#{$status}");
 
-    &[data-status='#{$status}'] {
+    &[data-status="#{$status}"] {
       background: $bg;
       border-color: $fg;
     }
 
-    &[data-status='#{$status}'] &__icon-wrapper {
+    &[data-status="#{$status}"] &__icon-wrapper {
       color: $fg;
     }
   }

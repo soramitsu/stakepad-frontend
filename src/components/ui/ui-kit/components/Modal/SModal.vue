@@ -1,76 +1,89 @@
 <script setup lang="ts">
-import { computed, provide, readonly, shallowRef, unref, watch, type Ref, type StyleValue } from 'vue'
-import { normalizeTransitionAttrs, useCloseOnEsc, useModalVisibility } from './util'
-import type { ModalApi } from './api'
-import { MODAL_API_KEY } from './api'
-import { useFocusTrap } from '../../composables/focus-trap'
-import type { FocusTrap, Options as FocusTrapOptions } from 'focus-trap'
-import { uniqueElementId } from '../../util'
-import { useBodyScrollLockIfPossible } from '../BodyScrollLockProvider'
-import { templateRef, useVModel } from '@vueuse/core'
+import {
+  computed,
+  provide,
+  readonly,
+  shallowRef,
+  unref,
+  watch,
+  type Ref,
+  type StyleValue,
+} from "vue";
+import {
+  normalizeTransitionAttrs,
+  useCloseOnEsc,
+  useModalVisibility,
+} from "./util";
+import type { ModalApi } from "./api";
+import { MODAL_API_KEY } from "./api";
+import { useFocusTrap } from "../../composables/focus-trap";
+import type { FocusTrap, Options as FocusTrapOptions } from "focus-trap";
+import { uniqueElementId } from "../../util";
+import { useBodyScrollLockIfPossible } from "../BodyScrollLockProvider";
+import { templateRef, useVModel } from "@vueuse/core";
 
-type ClassType = object | string | string[]
-type StyleType = StyleValue
+type ClassType = object | string | string[];
+type StyleType = StyleValue;
 
 interface Props {
   /**
    * Use it as `v-model:show`
    */
-  show: boolean
+  show: boolean;
 
   /**
    * CSS-Selector. The Teleport target. Set `null` to render in-place.
    *
    * @default 'body'
    */
-  teleportTo?: string
+  teleportTo?: string;
 
   /**
    * Whether position the modal as `absolute` instead of `fixed`
    * @default false
    */
-  absolute?: boolean
+  absolute?: boolean;
 
-  rootClass?: ClassType
-  modalClass?: ClassType
-  overlayClass?: ClassType
-  rootStyle?: StyleType
-  modalStyle?: StyleType
-  overlayStyle?: StyleType
+  rootClass?: ClassType;
+  modalClass?: ClassType;
+  overlayClass?: ClassType;
+  rootStyle?: StyleType;
+  modalStyle?: StyleType;
+  overlayStyle?: StyleType;
 
   /**
    * Name or raw bindings. You can even pass event listeners to the Transition component.
    */
-  modalTransition?: string | object
+  modalTransition?: string | object;
 
   /**
    * @see `modalTransition` prop
    */
-  overlayTransition?: string | object
+  overlayTransition?: string | object;
 
   /**
    * Lock scroll if possible. You should provide a `BodyScrollLockApi` with `SBodyScrollLockProvider` component.
    *
    * @default true
    */
-  lockScroll?: boolean
+  lockScroll?: boolean;
 
   /**
    * Set to `false` to not show overlay at all
    *
    * @default true
    */
-  showOverlay?: boolean
+  showOverlay?: boolean;
 
   /**
    * @default true
    */
-  closeOnOverlayClick?: boolean
+  closeOnOverlayClick?: boolean;
 
   /**
    * @default true
    */
-  closeOnEsc?: boolean
+  closeOnEsc?: boolean;
 
   /**
    * You can pass options to focus trap constructor or disable trap completely by passing `false`
@@ -79,30 +92,30 @@ interface Props {
    *
    * @default true
    */
-  focusTrap?: boolean | object
+  focusTrap?: boolean | object;
 
   /**
    * Always render modal content and toggle modal visibility with `v-show` instead of `v-if`
    *
    * @default false
    */
-  eager?: boolean
+  eager?: boolean;
 
   /**
    * ID of the modal label. If it is not set, then an unique ID will be generated.
    */
-  labelledBy?: string
+  labelledBy?: string;
 
   /**
    * Used for `aria-describedby`. It is not automatically generated.
    */
-  describedBy?: string | null
+  describedBy?: string | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  teleportTo: 'body',
-  modalTransition: 's-modal__modal-transition',
-  overlayTransition: 's-modal__overlay-transition',
+  teleportTo: "body",
+  modalTransition: "s-modal__modal-transition",
+  overlayTransition: "s-modal__overlay-transition",
   closeOnOverlayClick: true,
   closeOnEsc: true,
   showOverlay: true,
@@ -113,27 +126,38 @@ const props = withDefaults(defineProps<Props>(), {
     // here is a Vue typing error - primitive value factory is a valid default value
     uniqueElementId as unknown as string,
   describedBy: null,
-})
+});
 
-const emit = defineEmits(['update:show', 'click:overlay', 'before-open', 'after-open', 'before-close', 'after-close'])
+const emit = defineEmits([
+  "update:show",
+  "click:overlay",
+  "before-open",
+  "after-open",
+  "before-close",
+  "after-close",
+]);
 
 // ***
 
-const showModel = useVModel(props, 'show', emit)
-const eager = computed(() => props.eager)
-const showOverlay = computed(() => props.showOverlay)
+const showModel = useVModel(props, "show", emit);
+const eager = computed(() => props.eager);
+const showOverlay = computed(() => props.showOverlay);
 
 function close() {
-  showModel.value = false
+  showModel.value = false;
 }
 
-const modalRef = templateRef('modal')
-const rootRef = templateRef('root')
+const modalRef = templateRef("modal");
+const rootRef = templateRef("root");
 
 // VISIBILITY
 
-const overlayTransitionAttrs = computed(() => normalizeTransitionAttrs(props.overlayTransition))
-const modalTransitionAttrs = computed(() => normalizeTransitionAttrs(props.modalTransition))
+const overlayTransitionAttrs = computed(() =>
+  normalizeTransitionAttrs(props.overlayTransition),
+);
+const modalTransitionAttrs = computed(() =>
+  normalizeTransitionAttrs(props.modalTransition),
+);
 
 const {
   rootIf,
@@ -149,62 +173,65 @@ const {
   overlayEnabled: showOverlay,
   eager,
   emit,
-})
+});
 
 // FOCUS TRAP
 
-let focusTrapRef: null | Ref<null | FocusTrap> = null
+let focusTrapRef: null | Ref<null | FocusTrap> = null;
 if (props.focusTrap) {
-  const options: FocusTrapOptions = props.focusTrap === true ? {} : props.focusTrap
+  const options: FocusTrapOptions =
+    props.focusTrap === true ? {} : props.focusTrap;
 
-  const focusTrapTarget = shallowRef<null | HTMLElement | SVGElement>(null)
+  const focusTrapTarget = shallowRef<null | HTMLElement | SVGElement>(null);
   watch(
     [modalShow, rootRef],
     ([val, el]) => {
-      focusTrapTarget.value = (val ? el ?? null : null) as any
+      focusTrapTarget.value = (val ? el ?? null : null) as any;
     },
     {
       // edge case: eager rendering, modal is "display: none". `tabbable` throws an error
       // because contents are hidden yet. Post flush fixes it.
-      flush: 'post',
+      flush: "post",
     },
-  )
-  ;({ trap: focusTrapRef } = useFocusTrap({
+  );
+  ({ trap: focusTrapRef } = useFocusTrap({
     elem: focusTrapTarget,
     options: {
       ...options,
       escapeDeactivates(event) {
-        if (typeof options.escapeDeactivates === 'function') {
-          return options.escapeDeactivates(event)
+        if (typeof options.escapeDeactivates === "function") {
+          return options.escapeDeactivates(event);
         }
 
-        return props.closeOnEsc ? true : false
+        return props.closeOnEsc ? true : false;
       },
     },
-  }))
+  }));
 
   watch(
     focusTrapRef,
     (trap) => {
       try {
-        trap?.activate()
+        trap?.activate();
       } catch (err) {
         console.warn(
-          '[SModal] focus-trap activation is failed. Does your modal contain any tabbable node?' +
-            '\nTip: you can disable focus-trap completely by setting `focus-trap` prop to `false`' +
-            '\n\nOriginal error:\n\n%o',
+          "[SModal] focus-trap activation is failed. Does your modal contain any tabbable node?" +
+            "\nTip: you can disable focus-trap completely by setting `focus-trap` prop to `false`" +
+            "\n\nOriginal error:\n\n%o",
           err,
-        )
-        throw err
+        );
+        throw err;
       }
     },
     { immediate: true },
-  )
+  );
 }
 
 // BODY SCROLL LOCK
 
-useBodyScrollLockIfPossible(computed(() => (props.lockScroll ? unref(modalRef) : null)) as any)
+useBodyScrollLockIfPossible(
+  computed(() => (props.lockScroll ? unref(modalRef) : null)) as any,
+);
 
 // API
 
@@ -213,29 +240,26 @@ const api: ModalApi = readonly({
   focusTrap: focusTrapRef,
   labelledBy: computed(() => props.labelledBy),
   describedBy: computed(() => props.describedBy),
-})
-provide(MODAL_API_KEY, api)
+});
+provide(MODAL_API_KEY, api);
 
 // ETC
 
 function onOverlayClick() {
-  emit('click:overlay')
+  emit("click:overlay");
   if (props.closeOnOverlayClick) {
-    showModel.value = false
+    showModel.value = false;
   }
 }
 
 useCloseOnEsc(
   computed(() => showModel.value && props.closeOnEsc),
   close,
-)
+);
 </script>
 
 <template>
-  <Teleport
-    :to="teleportTo"
-    :disabled="teleportTo === null"
-  >
+  <Teleport :to="teleportTo" :disabled="teleportTo === null">
     <div
       v-if="rootIf"
       v-show="rootShow"
@@ -285,7 +309,7 @@ useCloseOnEsc(
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 .s-modal {
   $ease-in-out-md: cubic-bezier(0.4, 0, 0.2, 1);
@@ -328,26 +352,25 @@ useCloseOnEsc(
   }
 
   &__root {
-    &[data-absolute='true'] {
+    &[data-absolute="true"] {
       @apply absolute;
     }
-    &:not([data-absolute='true']) {
+    &:not([data-absolute="true"]) {
       @apply fixed;
     }
 
     @apply inset-0 flex items-center justify-center;
-    @apply z-999;
+    @apply z-[999];
   }
 
   &__overlay {
-    @apply z-999;
+    @apply z-[999];
     @apply absolute inset-0;
-    background: theme.token-as-var('sys.color.util.overlay');
+    background: theme.token-as-var("sys.color.util.overlay");
   }
 
   &__modal {
-    @apply z-1000;
+    @apply z-[1000];
   }
 }
-</style>computed, provide, readonly, shallowRef, unref, watch, type type import { useVModel, templateRef } from '@vueuse/core'
-
+</style>

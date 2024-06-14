@@ -1,1 +1,1 @@
-export { default as SAlert } from './SAlert.vue'
+export { default as SAlert } from "./SAlert.vue";

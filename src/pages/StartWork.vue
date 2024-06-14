@@ -47,6 +47,8 @@ import { useMetamask } from "@/composables/useMetamask";
 import MetamaskIcon from "@/assets/icons/metamask.svg";
 import WalletConnectIcon from "@/assets/icons/walletconnect.svg";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers5";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const accountsStore = useAccountsStore();
 const { wallet, handleConnect } = useMetamask();

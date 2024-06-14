@@ -1,71 +1,72 @@
 <script setup lang="ts">
-import { templateRef, useVModel } from '@vueuse/core';
-import { RADIO_GROUP_API_KEY } from './api'
-import { useRadiosSelector, useRadiosRegistration } from './util'
-import { computed, provide, readonly } from 'vue';
+import { templateRef, useVModel } from "@vueuse/core";
+import { RADIO_GROUP_API_KEY } from "./api";
+import { useRadiosSelector, useRadiosRegistration } from "./util";
+import { computed, provide, readonly } from "vue";
 
 interface Props {
-  modelValue?: null | symbol | string | number | object
+  modelValue?: null | symbol | string | number | object;
 
   /**
    * @default '[role=radio]'
    */
-  radioSelector?: string
+  radioSelector?: string;
 
-  labelledBy?: string
-  describedBy?: string
+  labelledBy?: string;
+  describedBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
-  radioSelector: '[role=radio]',
-  labelledBy: '',
-  describedBy: '',
-})
+  radioSelector: "[role=radio]",
+  labelledBy: "",
+  describedBy: "",
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 // API
 
-const model = useVModel(props, 'modelValue', emit, { passive: true })
+const model = useVModel(props, "modelValue", emit, { passive: true });
 
-const { elems: radioElements, update: updateRadioElements } = useRadiosSelector<HTMLElement>(
-  templateRef('root') as any,
-  computed(() => props.radioSelector),
-)
+const { elems: radioElements, update: updateRadioElements } =
+  useRadiosSelector<HTMLElement>(
+    templateRef("root") as any,
+    computed(() => props.radioSelector),
+  );
 
 const { registerRadio, moveFocus, checkFocused } = useRadiosRegistration({
   radioElements,
   model,
   updateRadioElements,
-})
+});
 
-provide(RADIO_GROUP_API_KEY, readonly({ registerRadio }))
+provide(RADIO_GROUP_API_KEY, readonly({ registerRadio }));
 
 // Handling keyboard
 
 function handleKeydown(e: KeyboardEvent) {
   switch (e.code) {
-    case 'ArrowDown':
-    case 'ArrowRight':
-      moveFocus()
-      break
+    case "ArrowDown":
+    case "ArrowRight":
+      moveFocus();
+      break;
 
-    case 'ArrowUp':
-    case 'ArrowLeft':
-      moveFocus(false)
-      break
+    case "ArrowUp":
+    case "ArrowLeft":
+      moveFocus(false);
+      break;
 
-    case 'Space':
-      checkFocused()
-      break
+    case "Space":
+      checkFocused();
+      break;
 
     default:
-      return
+      return;
   }
 
   // was handled
-  e.preventDefault()
+  e.preventDefault();
 }
 </script>
 

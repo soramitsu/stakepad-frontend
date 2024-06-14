@@ -31,7 +31,7 @@ type MockContract = {
   transfer: () => {
     hash: string;
   };
-  connect: any
+  connect: any;
 };
 
 const gas = "21000";
@@ -41,13 +41,13 @@ const getSigner = () => {
   return {
     getTransactionCount: () => 100,
     sendTransaction: (..._: any) => ({
-      hash: "0x0"
+      hash: "0x0",
     }),
     signMessage: (message: string) => ({
-      message
-    })
-  }
-}
+      message,
+    }),
+  };
+};
 
 export const ethers = {
   providers: {
@@ -64,7 +64,7 @@ export const ethers = {
       this.estimateGas = () => this.gas;
       this.getFeeData = () => ({ gasPrice: new BigNumber(this.gas) });
       this.getTransactionCount = () => nonce;
-      this.getSigner = getSigner
+      this.getSigner = getSigner;
     },
     JsonRpcProvider: function (this: MockJsonRpcProvider, node: string) {
       this.gas = gas;
@@ -75,7 +75,7 @@ export const ethers = {
       this.getFeeData = () => ({ gasPrice: new BigNumber(this.gas) });
       this.getTransactionCount = () => nonce;
       this.getCode = () => code;
-      this.getSigner = getSigner
+      this.getSigner = getSigner;
     },
   },
   utils: {
@@ -109,6 +109,6 @@ export const ethers = {
     });
     this.connect = (contract: any) => ({
       ...contract,
-    })
+    });
   },
 };

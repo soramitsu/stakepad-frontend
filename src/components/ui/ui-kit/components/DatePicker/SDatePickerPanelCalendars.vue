@@ -1,72 +1,72 @@
 <script setup lang="ts">
-import MonthTable from './SDatePickerTableMonths.vue'
-import YearTable from './SDatePickerTableYears.vue'
-import DatePanel from './SDatePickerPanelDate.vue'
+import MonthTable from "./SDatePickerTableMonths.vue";
+import YearTable from "./SDatePickerTableYears.vue";
+import DatePanel from "./SDatePickerPanelDate.vue";
 
-import type { StateStore, ShowState, ModelValueType } from './types'
-import type { DatePickerApi } from './api'
-import { useDatePickerApi } from './api'
-import { computed, ref } from 'vue'
+import type { StateStore, ShowState, ModelValueType } from "./types";
+import type { DatePickerApi } from "./api";
+import { useDatePickerApi } from "./api";
+import { computed, ref } from "vue";
 
 interface Props {
-  currentView: string
-  showState: ShowState
-  stateStore: StateStore
-  modelValue: ModelValueType
+  currentView: string;
+  showState: ShowState;
+  stateStore: StateStore;
+  modelValue: ModelValueType;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const state: DatePickerApi = useDatePickerApi()
+const state: DatePickerApi = useDatePickerApi();
 
-const emit = defineEmits(['update:showed-state', 'change-view', 'pick'])
+const emit = defineEmits(["update:showed-state", "change-view", "pick"]);
 
-const hoveredDate = ref<Date>(new Date())
+const hoveredDate = ref<Date>(new Date());
 
 const isRange = computed(() => {
-  return state.type === 'range'
-})
+  return state.type === "range";
+});
 
 const nextMonthShowState = computed(() => {
-  const month = props.showState.month > 10 ? 0 : props.showState.month + 1
-  const year = month === 0 ? props.showState.year + 1 : props.showState.year
+  const month = props.showState.month > 10 ? 0 : props.showState.month + 1;
+  const year = month === 0 ? props.showState.year + 1 : props.showState.year;
   return {
     month,
     year,
-  }
-})
+  };
+});
 
 const changeView = (viewName: string) => {
-  emit('change-view', viewName)
-}
+  emit("change-view", viewName);
+};
 
 const onDatePick = (data: any) => {
-  emit('pick', data)
-}
+  emit("pick", data);
+};
 
 const updateShowedState = (deltaMonth: number) => {
-  let newMonth = props.showState.month + deltaMonth
+  let newMonth = props.showState.month + deltaMonth;
   if (newMonth > 11) {
-    emit('update:showed-state', 0, props.showState.year + 1)
+    emit("update:showed-state", 0, props.showState.year + 1);
   } else if (newMonth < 0) {
-    emit('update:showed-state', 11, props.showState.year - 1)
+    emit("update:showed-state", 11, props.showState.year - 1);
   } else {
-    emit('update:showed-state', newMonth)
+    emit("update:showed-state", newMonth);
   }
-  return
-}
+  return;
+};
 
 const updateShowedMonth = (month: number) => {
-  emit('update:showed-state', month)
-}
+  emit("update:showed-state", month);
+};
 
 const updateShowedYear = (year: number) => {
-  emit('update:showed-state', undefined, year)
-}
+  emit("update:showed-state", undefined, year);
+};
 
 const updateHoveredDate = (date: Date) => {
-  hoveredDate.value = date
-}
+  hoveredDate.value = date;
+};
 </script>
 
 <template>
@@ -83,10 +83,7 @@ const updateHoveredDate = (date: Date) => {
         @update:hovered-date="updateHoveredDate"
       />
     </div>
-    <div
-      v-if="isRange"
-      class="ml-4"
-    >
+    <div v-if="isRange" class="ml-4">
       <DatePanel
         v-show="currentView === 'dates'"
         :show-state="nextMonthShowState"
@@ -109,16 +106,13 @@ const updateHoveredDate = (date: Date) => {
       />
     </div>
     <div v-if="currentView === 'years'">
-      <YearTable
-        :value="showState.year"
-        @pick="updateShowedYear"
-      />
+      <YearTable :value="showState.year" @pick="updateShowedYear" />
     </div>
   </div>
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 .s-date-picker-calendars-panel {
   @apply flex justify-center items-start;

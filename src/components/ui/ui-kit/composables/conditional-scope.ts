@@ -1,29 +1,32 @@
-import type { Ref, EffectScope } from 'vue'
-import { effectScope, watch, onScopeDispose } from 'vue'
+import type { Ref, EffectScope } from "vue";
+import { effectScope, watch, onScopeDispose } from "vue";
 
-export function useConditionalScope(enabled: Ref<boolean>, scopeSetupFn: () => void) {
-  let scope: EffectScope | null = null
+export function useConditionalScope(
+  enabled: Ref<boolean>,
+  scopeSetupFn: () => void,
+) {
+  let scope: EffectScope | null = null;
 
   function setupScope() {
-    scope = effectScope()
-    scope.run(scopeSetupFn)
+    scope = effectScope();
+    scope.run(scopeSetupFn);
   }
 
   function stopScope() {
-    scope?.stop()
+    scope?.stop();
   }
 
   watch(
     enabled,
     (flag) => {
       if (flag) {
-        setupScope()
+        setupScope();
       } else {
-        stopScope()
+        stopScope();
       }
     },
     { immediate: true },
-  )
+  );
 
-  onScopeDispose(stopScope)
+  onScopeDispose(stopScope);
 }

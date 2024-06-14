@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SSpinner } from '../Spinner'
-import { usePropTypeFilter } from '../../composables/prop-type-filter'
+import { SSpinner } from "../Spinner";
+import { usePropTypeFilter } from "../../composables/prop-type-filter";
 import {
   BUTTON_ICON_POSITION_VALUES,
   BUTTON_SIZE_VALUES,
@@ -8,48 +8,57 @@ import {
   SPINNER_SIZE,
   SPINNER_WIDTH,
   FONT_SIZE,
-} from './consts'
-import type { ButtonType, ButtonSize, ButtonIconPosition, HTMLButtonType } from './types'
-import { computed } from 'vue';
+} from "./consts";
+import type {
+  ButtonType,
+  ButtonSize,
+  ButtonIconPosition,
+  HTMLButtonType,
+} from "./types";
+import { computed } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    type?: ButtonType
-    size?: ButtonSize
-    nativeType?: HTMLButtonType
-    icon?: string
-    iconPosition?: ButtonIconPosition
-    rounded?: boolean
-    disabled?: boolean
-    loading?: boolean
-    uppercase?: boolean
+    type?: ButtonType;
+    size?: ButtonSize;
+    nativeType?: HTMLButtonType;
+    icon?: string;
+    iconPosition?: ButtonIconPosition;
+    rounded?: boolean;
+    disabled?: boolean;
+    loading?: boolean;
+    uppercase?: boolean;
   }>(),
   {
-    type: 'secondary',
-    size: 'md',
-    nativeType: 'button',
-    icon: '',
-    iconPosition: 'left',
+    type: "secondary",
+    size: "md",
+    nativeType: "button",
+    icon: "",
+    iconPosition: "left",
     rounded: false,
     disabled: false,
     loading: false,
     uppercase: false,
   },
-)
+);
 
-const filterProp = usePropTypeFilter(props)
+const filterProp = usePropTypeFilter(props);
 
-const definitelyType = filterProp('type', BUTTON_TYPE_VALUES, 'primary')
-const definitelySize = filterProp('size', BUTTON_SIZE_VALUES, 'md')
-const definitelyIconPosition = filterProp('iconPosition', BUTTON_ICON_POSITION_VALUES, 'left')
-const isAction = computed(() => definitelyType.value === 'action')
+const definitelyType = filterProp("type", BUTTON_TYPE_VALUES, "primary");
+const definitelySize = filterProp("size", BUTTON_SIZE_VALUES, "md");
+const definitelyIconPosition = filterProp(
+  "iconPosition",
+  BUTTON_ICON_POSITION_VALUES,
+  "left",
+);
+const isAction = computed(() => definitelyType.value === "action");
 const font = computed(() => {
-  if (definitelySize.value === 'xs' && props.uppercase) {
-    return 'sora-tpg-ch3'
+  if (definitelySize.value === "xs" && props.uppercase) {
+    return "sora-tpg-ch3";
   }
 
-  return FONT_SIZE[definitelySize.value]
-})
+  return FONT_SIZE[definitelySize.value];
+});
 </script>
 
 <template>
@@ -77,30 +86,18 @@ const font = computed(() => {
       :width="SPINNER_WIDTH[definitelySize]"
     />
 
-    <span
-      class="s-button__icon"
-      data-testid="icon"
-    >
-      <i
-        v-if="icon"
-        :class="icon"
-      />
-      <slot
-        v-else
-        name="icon"
-      />
+    <span class="s-button__icon" data-testid="icon">
+      <i v-if="icon" :class="icon" />
+      <slot v-else name="icon" />
     </span>
-    <span
-      class="s-button__text"
-      data-testid="text"
-    >
+    <span class="s-button__text" data-testid="text">
       <slot v-if="!isAction" />
     </span>
   </button>
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 @mixin button-type($name, $default, $hover, $active, $disabled) {
   &_type_#{$name} {
@@ -131,7 +128,7 @@ const font = computed(() => {
   }
 
   &_size_#{$name}:not(&_type_action) {
-    @apply #{$padding};
+    padding: $padding;
   }
 
   &_size_#{$name}#{&}_type_action {
@@ -153,11 +150,11 @@ const font = computed(() => {
   }
 
   &_icon-position_left &__icon {
-    @apply mr-8px;
+    @apply mr-[8px];
   }
 
   &_size_mini#{&}_icon-position_left &__icon {
-    @apply mr-6px;
+    @apply mr-[6px];
   }
 
   &_icon-position_right {
@@ -165,11 +162,11 @@ const font = computed(() => {
   }
 
   &_icon-position_right &__icon {
-    @apply ml-8px;
+    @apply ml-[8px];
   }
 
   &_size_mini#{&}_icon-position_right &__icon {
-    @apply ml-6px;
+    @apply ml-[6px];
   }
 
   &_type_action &__icon,
@@ -179,69 +176,95 @@ const font = computed(() => {
   }
 
   &_type_primary {
-    background-color: theme.token-as-var('sys.color.primary');
-    color: theme.token-as-var('sys.color.content-on-background-inverted');
+    background-color: #d0021b;
+    color: #fff;
 
     &:hover {
-      background-color: theme.token-as-var('sys.color.primary-hover');
+      background-color: #c6021a;
     }
 
     &:active {
-      background-color: theme.token-as-var('sys.color.primary-pressed');
+      background-color: #bb0218;
     }
   }
 
   &_type_primary#{&}_disabled {
-    background-color: theme.token-as-var('sys.color.primary-hover-background');
+    background-color: #f6ccd1;
   }
 
   &_type_secondary,
   &_type_action {
-    background-color: theme.token-as-var('sys.color.background');
-    color: theme.token-as-var('sys.color.content-primary');
+    background-color: theme.token-as-var("sys.color.background");
+    color: #d0021b;
 
     &:hover {
-      background-color: theme.token-as-var('sys.color.background-hover');
+      background-color: theme.token-as-var("sys.color.background-hover");
     }
 
     &:active {
-      background-color: theme.token-as-var('sys.color.border-primary');
+      background-color: theme.token-as-var("sys.color.border-primary");
     }
   }
 
   &_type_secondary#{&}_disabled,
   &_type_action#{&}_disabled {
-    background-color: theme.token-as-var('sys.color.disabled');
-    color: theme.token-as-var('sys.color.on-disabled');
+    background-color: theme.token-as-var("sys.color.disabled");
+    color: theme.token-as-var("sys.color.on-disabled");
   }
 
   &_type_outline {
-    border: 1px solid theme.token-as-var('sys.color.border-primary');
-    color: theme.token-as-var('sys.color.content-primary');
+    border: 1px solid #dde0e1;
+    color: #2d2926;
 
     &:hover {
-      border: 1px solid theme.token-as-var('sys.color.primary-hover');
-      color: theme.token-as-var('sys.color.primary-hover');
+      border: 1px solid #c6021a;
+      color: #c6021a;
     }
 
     &:active {
-      border: 1px solid theme.token-as-var('sys.color.primary-pressed');
-      color: theme.token-as-var('sys.color.primary-pressed');
+      border: 1px solid #bb0218;
+      color: #bb0218;
     }
   }
 
   &_type_outline#{&}_disabled {
-    border: 1px solid theme.token-as-var('sys.color.disabled');
-    color: theme.token-as-var('sys.color.on-disabled');
+    border: 1px solid #f5f7f8;
+    color: #f5f7f8;
   }
 
-  @include button-size(xs, $height: 24px, $padding: px-8px, $icon-size: 12px, $border-radius: 2px);
+  .padding-8 {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 
-  @include button-size(sm, $height: 32px, $padding: px-12px, $icon-size: 16px);
+  .padding-12 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 
-  @include button-size(md, $height: 40px, $padding: px-16px, $icon-size: 16px);
+  .padding-16 {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-  @include button-size(lg, $height: 56px, $padding: px-24px, $icon-size: 24px);
+  .padding-24 {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @include button-size(
+    xs,
+    $height: 24px,
+    $padding: 0px 8px 0px 8px,
+    $icon-size: 12px,
+    $border-radius: 2px
+  );
+
+  @include button-size(sm, $height: 32px, $padding: 0px 12px 0px 12px, $icon-size: 16px);
+
+  @include button-size(md, $height: 40px, $padding: 0px 16px 0px 16px, $icon-size: 16px);
+
+  @include button-size(lg, $height: 56px, $padding: 0px 24px 0px 24px, $icon-size: 24px);
 
   &_rounded {
     @apply rounded-full;

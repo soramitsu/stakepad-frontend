@@ -1,43 +1,50 @@
-import './SCheckboxAtom.scss'
+import "./SCheckboxAtom.scss";
 
-import IconCheck from '~icons/uil/check'
-import IconMinus from '~icons/uil/minus'
+import IconCheck from "../icons/icomoon/circle-plus-16.svg"
+import IconMinus from "../icons/icomoon/circle-minus-16.svg";
 
-import type { FunctionalComponent, PropType } from 'vue'
-import { h, mergeProps } from 'vue'
-import type { CheckboxSize, CheckboxState } from './types'
+import type { FunctionalComponent, PropType } from "vue";
+import { h, mergeProps } from "vue";
+import type { CheckboxSize, CheckboxState } from "./types";
 
 interface Props {
-  size: CheckboxSize
-  checked?: CheckboxState
-  hover?: boolean
-  disabled?: boolean
+  size: CheckboxSize;
+  checked?: CheckboxState;
+  hover?: boolean;
+  disabled?: boolean;
 }
 
-const IconEmpty = () => h('svg', { width: '1.2em', height: '1.2em' }, h('path'))
+const IconEmpty = () =>
+  h("svg", { width: "1.2em", height: "1.2em" }, h("path"));
 
 const SCheckboxAtom: FunctionalComponent<Props> = (props, { attrs }) => {
   return h(
-    'div',
+    "div",
     mergeProps(
       {
         class: [
-          's-checkbox-atom',
+          "s-checkbox-atom",
           {
-            's-checkbox-atom_disabled': props.disabled ?? false,
-            's-checkbox-atom_hover': props.hover ?? false,
+            "s-checkbox-atom_disabled": props.disabled ?? false,
+            "s-checkbox-atom_hover": props.hover ?? false,
           },
         ],
-        'data-size': props.size,
-        'data-checked': props.checked ?? false,
+        "data-size": props.size,
+        "data-checked": props.checked ?? false,
       },
       attrs,
     ),
-    [props.checked ? (props.checked === 'mixed' ? h(IconMinus) : h(IconCheck)) : IconEmpty()],
-  )
-}
+    [
+      props.checked
+        ? props.checked === "mixed"
+          ? h(IconMinus)
+          : h(IconCheck)
+        : IconEmpty(),
+    ],
+  );
+};
 
-SCheckboxAtom.displayName = 'SCheckboxAtom'
+SCheckboxAtom.displayName = "SCheckboxAtom";
 
 SCheckboxAtom.props = {
   size: {
@@ -49,6 +56,6 @@ SCheckboxAtom.props = {
   },
   hover: Boolean,
   disabled: Boolean,
-}
+};
 
-export default SCheckboxAtom
+export default SCheckboxAtom;

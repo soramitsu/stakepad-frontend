@@ -1,5 +1,5 @@
-@use '@/theme';
-@use 'sass:map';
+@use "../../theme";
+@use "sass:map";
 
 $outline-size: (
   md: 12px,
@@ -19,8 +19,8 @@ $dot-border: (
   xl: 2px,
 );
 
-$color-primary: theme.token-as-var('sys.color.primary');
-$color-border-primary: theme.token-as-var('sys.color.border-primary');
+$color-primary: theme.token-as-var("sys.color.primary");
+$color-border-primary: theme.token-as-var("sys.color.border-primary");
 
 $transition-dur-easing: 0.2s ease;
 
@@ -43,12 +43,12 @@ $transition-dur-easing: 0.2s ease;
   }
 
   &::before {
-    content: '';
+    content: "";
     opacity: 0;
     background: $color-primary;
     border: {
       style: solid;
-      color: theme.token-as-var('sys.color.util.body');
+      color: theme.token-as-var("sys.color.util.body");
     }
     width: 100%;
     height: 100%;
@@ -65,7 +65,7 @@ $transition-dur-easing: 0.2s ease;
   }
 
   @each $size in md, lg, xl {
-    &[data-size='#{$size}'] {
+    &[data-size="#{$size}"] {
       $px: map.get($outline-size, $size);
       width: $px;
       height: $px;

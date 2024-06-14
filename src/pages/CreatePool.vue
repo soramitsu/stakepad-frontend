@@ -49,6 +49,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
+  NGrid,
+  NFormItemGi,
+  NButton,
+  NSpace,
+  NH1,
+  NForm,
+  NInput,
+  NInputNumber,
 } from "naive-ui";
 import { usePoolsStore } from "@/stores/pools";
 import { useRouter } from "vue-router";

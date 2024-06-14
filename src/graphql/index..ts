@@ -41,25 +41,22 @@ export class GraphWrapper {
   }
 
   getSubscription(name: string, scheme: string) {
-    const messages = ref([] as any)
+    const messages = ref([] as any);
 
     const { result } = useSubscription(
       gql`
         subscription ${name} {
           ${scheme}
         }
-      `
-    )
+      `,
+    );
 
-    watch(
-      result,
-      (data: any) => {
-        messages.value.push(data)
-      }
-    )
+    watch(result, (data: any) => {
+      messages.value.push(data);
+    });
 
     return {
-      messages
-    }
+      messages,
+    };
   }
 }

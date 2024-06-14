@@ -1,37 +1,38 @@
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core';
+import { useVModel } from "@vueuse/core";
 
 interface Props {
   /**
    * v-model for two-way data binding
    */
-  modelValue?: boolean
+  modelValue?: boolean;
   /**
    * Id for matching switch with label
    *
    */
-  id: string
+  id: string;
   /**
    * Text label for switch
    *
    * @default ''
    */
-  label?: string
+  label?: string;
   /**
    * Attr specfifies whether switch is disabled
    *
    * @default false
    */
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  label: '',
+  label: "",
   disabled: false,
-})
+});
 
-const emit = defineEmits<(event: 'update:modelValue', value: boolean) => void>()
-const model = useVModel(props, 'modelValue', emit)
+const emit =
+  defineEmits<(event: "update:modelValue", value: boolean) => void>();
+const model = useVModel(props, "modelValue", emit);
 </script>
 
 <template>
@@ -42,23 +43,20 @@ const model = useVModel(props, 'modelValue', emit)
       type="checkbox"
       :disabled="disabled"
       class="s-switch__button"
-    >
-    <label
-      :for="id"
-      class="s-switch__label sora-tpg-p3"
-    >{{ label }}</label>
+    />
+    <label :for="id" class="s-switch__label sora-tpg-p3">{{ label }}</label>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use '@/theme';
+@use "../../theme";
 
-$border-primary: theme.token-as-var('sys.color.border-primary');
-$content-primary: theme.token-as-var('sys.color.content-primary');
-$content-quaternary: theme.token-as-var('sys.color.content-quaternary');
-$primary: theme.token-as-var('sys.color.primary');
-$primary-hover: theme.token-as-var('sys.color.primary-hover');
-$util-surface: theme.token-as-var('sys.color.util.surface');
+$border-primary: theme.token-as-var("sys.color.border-primary");
+$content-primary: theme.token-as-var("sys.color.content-primary");
+$content-quaternary: theme.token-as-var("sys.color.content-quaternary");
+$primary: theme.token-as-var("sys.color.primary");
+$primary-hover: theme.token-as-var("sys.color.primary-hover");
+$util-surface: theme.token-as-var("sys.color.util.surface");
 
 .s-switch {
   display: flex;
@@ -79,7 +77,7 @@ $util-surface: theme.token-as-var('sys.color.util.surface');
       background-color: $primary-hover;
     }
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       width: 20px;
       height: 20px;

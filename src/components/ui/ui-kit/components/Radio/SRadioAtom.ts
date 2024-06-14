@@ -1,38 +1,38 @@
-import './SRadioAtom.scss'
+import "./SRadioAtom.scss";
 
-import type { FunctionalComponent, PropType } from 'vue'
-import { h, mergeProps } from 'vue'
-import type { RadioSize } from './types'
+import type { FunctionalComponent, PropType } from "vue";
+import { h, mergeProps } from "vue";
+import type { RadioSize } from "./types";
 
 interface Props {
-  checked?: boolean
-  disabled?: boolean
+  checked?: boolean;
+  disabled?: boolean;
   /**
    * Forced hover activation. Useful when it is a part of a larger component.
    */
-  hover?: boolean
-  size: RadioSize
+  hover?: boolean;
+  size: RadioSize;
 }
 
 const SRadioAtom: FunctionalComponent<Props> = (props, { attrs }) => {
   return h(
-    'div',
+    "div",
     mergeProps(
       {
         class: [
-          's-radio-atom',
+          "s-radio-atom",
           {
-            's-radio-atom_checked': props.checked ?? false,
-            's-radio-atom_disabled': props.disabled ?? false,
-            's-radio-atom_hover': props.hover ?? false,
+            "s-radio-atom_checked": props.checked ?? false,
+            "s-radio-atom_disabled": props.disabled ?? false,
+            "s-radio-atom_hover": props.hover ?? false,
           },
         ],
-        'data-size': props.size,
+        "data-size": props.size,
       },
       attrs,
     ),
-  )
-}
+  );
+};
 
 SRadioAtom.props = {
   size: {
@@ -42,8 +42,8 @@ SRadioAtom.props = {
   disabled: Boolean,
   hover: Boolean,
   checked: Boolean,
-}
+};
 
-SRadioAtom.displayName = SRadioAtom.name
+SRadioAtom.displayName = SRadioAtom.name;
 
-export default SRadioAtom
+export default SRadioAtom;

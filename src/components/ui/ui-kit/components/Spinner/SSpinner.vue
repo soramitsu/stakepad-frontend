@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { eagerComputed } from '@vueuse/core';
+import { eagerComputed } from "@vueuse/core";
 
 // Animated SVG comes from https://codepen.io/supah/pen/BjYLdW
 // TODO refactor to functional
@@ -10,37 +10,31 @@ interface Props {
    *
    * @default '1em'
    */
-  size?: number | string
+  size?: number | string;
   /**
    * Stroke width
    *
    * @default 4
    */
-  width?: number | string
+  width?: number | string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: '1em',
+  size: "1em",
   width: 5,
-})
+});
 
 const sizeNorm = eagerComputed(() => {
-  if (typeof props.size === 'number' || !Number.isNaN(Number(props.size))) {
-    return `${props.size}px`
+  if (typeof props.size === "number" || !Number.isNaN(Number(props.size))) {
+    return `${props.size}px`;
   }
-  return props.size
-})
+  return props.size;
+});
 </script>
 
 <template>
   <svg viewBox="0 0 50 50">
-    <circle
-      cx="25"
-      cy="25"
-      r="20"
-      fill="none"
-      stroke-width="5"
-    />
+    <circle cx="25" cy="25" r="20" fill="none" stroke-width="5" />
   </svg>
 </template>
 

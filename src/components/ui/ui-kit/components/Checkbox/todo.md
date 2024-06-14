@@ -10,7 +10,7 @@
 
   ```vue
   <script setup>
-  const model = reactive(new Set(['foo']))
+  const model = reactive(new Set(["foo"]));
   </script>
 
   <template>
@@ -24,7 +24,9 @@
   ```html
   <div role="group">
     <div role="checkbox" tabindex="0" aria-checked="true">Foo</div>
-    <div role="checkbox" tabindex="0" aria-checked="false" aria-disabled="true">Bar</div>
+    <div role="checkbox" tabindex="0" aria-checked="false" aria-disabled="true">
+      Bar
+    </div>
   </div>
   ```
 

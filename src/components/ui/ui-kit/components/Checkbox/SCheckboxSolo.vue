@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { uniqueElementId } from '../../util'
-import type { CheckboxSize, CheckboxType } from './types'
-import { CHECKBOX_SIZE_VALUES, CHECKBOX_TYPE_VALUES } from './types'
-import { usePropTypeFilter } from '../../composables/prop-type-filter'
-import SRadioBody from '../Radio/SRadioBody'
-import SCheckboxAtom from './SCheckboxAtom'
-import { ref } from 'vue'
-import { useVModel } from '@vueuse/core'
+import { uniqueElementId } from "../../util";
+import type { CheckboxSize, CheckboxType } from "./types";
+import { CHECKBOX_SIZE_VALUES, CHECKBOX_TYPE_VALUES } from "./types";
+import { usePropTypeFilter } from "../../composables/prop-type-filter";
+import SRadioBody from "../Radio/SRadioBody";
+import SCheckboxAtom from "./SCheckboxAtom";
+import { ref } from "vue";
+import { useVModel } from "@vueuse/core";
 
 interface Props {
-  modelValue?: boolean
-  type?: CheckboxType
-  size?: CheckboxSize
-  disabled?: boolean
+  modelValue?: boolean;
+  type?: CheckboxType;
+  size?: CheckboxSize;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
-  type: 'default',
-  size: 'md',
-})
+  type: "default",
+  size: "md",
+});
 
-const propFilter = usePropTypeFilter(props)
+const propFilter = usePropTypeFilter(props);
 
-const definitelyType = propFilter('type', CHECKBOX_TYPE_VALUES, 'default')
-const definitelySize = propFilter('size', CHECKBOX_SIZE_VALUES, 'md')
+const definitelyType = propFilter("type", CHECKBOX_TYPE_VALUES, "default");
+const definitelySize = propFilter("size", CHECKBOX_SIZE_VALUES, "md");
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
-const model = useVModel(props, 'modelValue', emit, { passive: true })
+const model = useVModel(props, "modelValue", emit, { passive: true });
 
 function toggleModel() {
-  model.value = !model.value
+  model.value = !model.value;
 }
 
-const uniqueLabelId = uniqueElementId()
-const uniqueDescriptionId = uniqueElementId()
-const hover = ref(false)
+const uniqueLabelId = uniqueElementId();
+const uniqueDescriptionId = uniqueElementId();
+const hover = ref(false);
 </script>
 
 <template>
@@ -51,7 +51,7 @@ const hover = ref(false)
     :label-id="uniqueLabelId"
     :description-id="uniqueDescriptionId"
     :tabindex="disabled ? -1 : 0"
-    class="s-checkbox-solo"
+    class="s-checkbox-atom"
     @click="toggleModel"
     @keypress.space="toggleModel"
     @mouseenter="hover = true"

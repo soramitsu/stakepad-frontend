@@ -4,4 +4,8 @@
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+body {
+  font-family: 'Sora', sans-serif;
+}
+</style>

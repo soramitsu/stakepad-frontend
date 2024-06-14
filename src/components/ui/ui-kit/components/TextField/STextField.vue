@@ -1,23 +1,23 @@
 <script lang="ts">
 export default {
   inheritAttrs: false,
-}
+};
 
-import { computed, ref, useAttrs, useSlots, type StyleValue } from 'vue'
-import { Status } from '../../types'
-import { useToggle, useVModel, type MaybeElementRef } from '@vueuse/core'
+import { computed, ref, useAttrs, useSlots, type StyleValue } from "vue";
+import { Status } from "../../types";
+import { useToggle, useVModel, type MaybeElementRef } from "@vueuse/core";
 
 /**
  * warning: don't use it inside of `Props`. Vue compiler determines it
  * as an object and generates wrong props definition
  */
-type TextFieldStatus = Exclude<Status, typeof Status.Info>
+type TextFieldStatus = Exclude<Status, typeof Status.Info>;
 
 interface Props {
   /**
    * Model value
    */
-  modelValue?: string
+  modelValue?: string;
 
   /**
    * "Strict sync" means that when `<input>` element's value is updated,
@@ -31,34 +31,34 @@ interface Props {
    *
    * @default false
    */
-  noModelValueStrictSync?: boolean
+  noModelValueStrictSync?: boolean;
 
   /**
    * Will be used if `label` slot is omitted
    */
-  label?: string
+  label?: string;
 
   /**
    * Recommended for a11y
    */
-  id?: string
+  id?: string;
 
   /**
    * @default false
    */
-  password?: boolean
+  password?: boolean;
 
   /**
    * Disable eye-toggle that is shown if input is `password`
    *
    * @default false
    */
-  noEye?: boolean
+  noEye?: boolean;
 
   /**
    * @default false
    */
-  disabled?: boolean
+  disabled?: boolean;
 
   /**
    * If this value is defined, then the counter will be shown.
@@ -73,25 +73,25 @@ interface Props {
    *
    * @default false
    */
-  counter?: boolean | number | string
+  counter?: boolean | number | string;
 
   /**
    * Primary status prop. Overrides `success`, `warning` and `error` particular
    * setters.
    */
-  status?: typeof Status.Success | typeof Status.Error | typeof Status.Warning
+  status?: typeof Status.Success | typeof Status.Error | typeof Status.Warning;
   /**
    * Shorthand for `success` status
    */
-  success?: boolean
+  success?: boolean;
   /**
    * Shorthand for `warning` status
    */
-  warning?: boolean
+  warning?: boolean;
   /**
    * Shorthand for `error` status
    */
-  error?: boolean
+  error?: boolean;
   /**
    * Text to display under the input.
    *
@@ -101,16 +101,16 @@ interface Props {
    *
    * Also you can use `message` slot.
    */
-  message?: string
+  message?: string;
   /**
    * Manually activates filled state
    */
-  filledState?: boolean
+  filledState?: boolean;
 }
 </script>
 
 <script setup lang="ts">
-import { STATUS_ICONS_MAP_16, IconEye, IconEyeOff } from '../icons'
+import { STATUS_ICONS_MAP_16 } from "../icons";
 
 const props = withDefaults(defineProps<Props>(), {
   multiline: false,
@@ -120,70 +120,72 @@ const props = withDefaults(defineProps<Props>(), {
   noEye: false,
   noModelValueStrictSync: false,
   filledState: false,
-})
+});
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: string): void
-  (event: 'click:input-wrapper', value: MouseEvent): void
-}>()
+  (event: "update:modelValue", value: string): void;
+  (event: "click:input-wrapper", value: MouseEvent): void;
+}>();
 
-const slots = useSlots()
+const slots = useSlots();
 
 // ***
 
 const status = computed<null | TextFieldStatus>(() => {
-  if (props.status) return props.status
-  if (props.success) return Status.Success
-  if (props.warning) return Status.Warning
-  if (props.error) return Status.Error
-  return null
-})
+  if (props.status) return props.status;
+  if (props.success) return Status.Success;
+  if (props.warning) return Status.Warning;
+  if (props.error) return Status.Error;
+  return null;
+});
 
-const model = useVModel(props, 'modelValue', emit)
+const model = useVModel(props, "modelValue", emit);
 
 function onInput(e: Event) {
-  const el = e.target as HTMLInputElement
-  model.value = el.value
+  const el = e.target as HTMLInputElement;
+  model.value = el.value;
   if (!props.noModelValueStrictSync) {
-    el.value = model.value ?? ''
+    el.value = model.value ?? "";
   }
 }
 
-const isValueEmpty = computed(() => !model.value)
-const isFocused = ref(false)
+const isValueEmpty = computed(() => !model.value);
+const isFocused = ref(false);
 const labelTypographyClass = computed(() =>
-  !(props.filledState || isFocused.value) && isValueEmpty.value ? 'sora-tpg-p3' : 'sora-tpg-p4',
-)
+  !(props.filledState || isFocused.value) && isValueEmpty.value
+    ? "sora-tpg-p3"
+    : "sora-tpg-p4",
+);
 
-const inputRef = ref<MaybeElementRef>(null)
+const inputRef = ref<MaybeElementRef>(null);
 
 function handleInputWrapperClick(event: MouseEvent) {
   if (event.target !== document.activeElement) {
-    event.preventDefault()
+    event.preventDefault();
   }
 
   if (inputRef.value instanceof HTMLInputElement && !isFocused.value) {
-    inputRef.value.focus()
-    isFocused.value = true
+    inputRef.value.focus();
+    isFocused.value = true;
   }
 
-  emit('click:input-wrapper', event)
+  emit("click:input-wrapper", event);
 }
 
 function handleInputWrapperMouseDown(event: MouseEvent) {
-  if (event.target === inputRef.value) return
+  if (event.target === inputRef.value) return;
 
-  event.preventDefault()
+  event.preventDefault();
 }
 
 // MESSAGE
 
-const isMessageSlotDefined = () => !!slots.message
-const shouldRenderMessage = () => !!props.message || isMessageSlotDefined()
+const isMessageSlotDefined = () => !!slots.message;
+const shouldRenderMessage = () => !!props.message || isMessageSlotDefined();
 const messageIcon = computed(() => {
-  if (status.value === null) return null
-  return STATUS_ICONS_MAP_16[status.value]
-})
+  if (status.value === null) return null;
+  return STATUS_ICONS_MAP_16[status.value];
+});
 
 // COUNTER
 
@@ -191,52 +193,55 @@ interface CounterConfig {
   /**
    * Normalized limit, >= 0 for sure
    */
-  limit: null | number
+  limit: null | number;
 }
 
 const counterConfig = computed<null | CounterConfig>(() => {
-  const val = props.counter
-  const ty = typeof val
-  if (ty === 'boolean' && val) {
-    return { limit: null }
+  const val = props.counter;
+  const ty = typeof val;
+  if (ty === "boolean" && val) {
+    return { limit: null };
   }
-  if (ty === 'number' || ty === 'string') {
-    const num = Number(val)
-    return { limit: num >= 0 ? num : null }
+  if (ty === "number" || ty === "string") {
+    const num = Number(val);
+    return { limit: num >= 0 ? num : null };
   }
-  return null
-})
+  return null;
+});
 
 const counterText = computed<string | null>(() => {
-  const config = counterConfig.value
-  if (!config) return null
-  const { limit } = config
-  const currentCount = model.value?.length ?? 0
-  return limit === null ? String(currentCount) : `${currentCount}/${limit}`
-})
+  const config = counterConfig.value;
+  if (!config) return null;
+  const { limit } = config;
+  const currentCount = model.value?.length ?? 0;
+  return limit === null ? String(currentCount) : `${currentCount}/${limit}`;
+});
 
 // attrs are not reactive: https://vuejs.org/api/composition-api-setup.html#setup-context
 // so we need to compute them directly in the render function
-const attrs = useAttrs()
-const rootClass = () => attrs.class
-const rootStyle = () => attrs.style as StyleValue
+const attrs = useAttrs();
+const rootClass = () => attrs.class;
+const rootStyle = () => attrs.style as StyleValue;
 const inputAttrs = () => {
-  const { style, class: clazz, ...rest } = attrs
-  return rest
-}
+  const { style, class: clazz, ...rest } = attrs;
+  return rest;
+};
 
 // APPEND
 
-const showEye = computed<boolean>(() => props.password && !props.noEye)
-const isAppendSlotDefined = () => !!slots.append
-const shouldRenderAppend = () => !!counterText.value || isAppendSlotDefined() || showEye.value
+const showEye = computed<boolean>(() => props.password && !props.noEye);
+const isAppendSlotDefined = () => !!slots.append;
+const shouldRenderAppend = () =>
+  !!counterText.value || isAppendSlotDefined() || showEye.value;
 
 // EYE
 
-const [forceRevealPassword, toggleForceReveal] = useToggle()
+const [forceRevealPassword, toggleForceReveal] = useToggle();
 const inputType = computed(() =>
-  props.password && (!showEye.value || !forceRevealPassword.value) ? 'password' : 'text',
-)
+  props.password && (!showEye.value || !forceRevealPassword.value)
+    ? "password"
+    : "text",
+);
 </script>
 
 <template>
@@ -260,10 +265,7 @@ const inputType = computed(() =>
       @click="handleInputWrapperClick"
       @mousedown="handleInputWrapperMouseDown"
     >
-      <label
-        :for="id"
-        :class="labelTypographyClass"
-      >
+      <label :for="id" :class="labelTypographyClass">
         <slot name="label">{{ label }}</slot>
       </label>
 
@@ -281,7 +283,7 @@ const inputType = computed(() =>
           @input="onInput"
           @focus="isFocused = true"
           @blur="isFocused = false"
-        >
+        />
       </div>
 
       <div
@@ -306,8 +308,6 @@ const inputType = computed(() =>
           type="button"
           @click.stop="toggleForceReveal()"
         >
-          <IconEye v-if="!forceRevealPassword" />
-          <IconEyeOff v-else />
         </button>
       </div>
     </div>
@@ -333,7 +333,7 @@ const inputType = computed(() =>
 </template>
 
 <style lang="scss">
-@use '@/theme';
+@use "../../theme";
 
 $height: 56px;
 $input-padding: 24px 16px 6px 16px;
@@ -341,10 +341,10 @@ $label-top-primary: 16px;
 $label-top-secondary: 6px;
 $message-icon-alignment-fix: -1px;
 
-$theme-bg: theme.token-as-var('sys.color.background');
-$theme-bg-hover: theme.token-as-var('sys.color.background-hover');
-$theme-border-primary: theme.token-as-var('sys.color.border-primary');
-$theme-content-tertiary: theme.token-as-var('sys.color.content-tertiary');
+$theme-bg: #f5f7f8;
+$theme-bg-hover: #eceff0;
+$theme-border-primary: #dde0e1;
+$theme-content-tertiary: #75787b;
 
 .s-text-field {
   $root: &;
@@ -396,7 +396,7 @@ $theme-content-tertiary: theme.token-as-var('sys.color.content-tertiary');
     padding: $input-padding;
 
     input {
-      @apply flex-1 w-full min-w-1/4;
+      @apply flex-1 w-full min-w-[1/4];
 
       background: transparent;
       &:focus {
@@ -413,12 +413,14 @@ $theme-content-tertiary: theme.token-as-var('sys.color.content-tertiary');
     color: $theme-content-tertiary;
   }
 
-  @each $status in 'success', 'warning', 'error' {
-    $col: theme.token-as-var('sys.color.status.#{$status}');
-    $bg: theme.token-as-var('sys.color.status.#{$status}-background');
-    $bg-hover: theme.token-as-var('sys.color.status.#{$status}-background-hover');
+  @each $status in "success", "warning", "error" {
+    $col: theme.token-as-var("sys.color.status.#{$status}");
+    $bg: theme.token-as-var("sys.color.status.#{$status}-background");
+    $bg-hover: theme.token-as-var(
+      "sys.color.status.#{$status}-background-hover"
+    );
 
-    &[data-status='#{$status}'] {
+    &[data-status="#{$status}"] {
       label {
         color: $col;
       }

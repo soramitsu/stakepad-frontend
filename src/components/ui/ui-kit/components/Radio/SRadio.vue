@@ -1,44 +1,48 @@
 <script setup lang="ts">
-import { useRadioGroupApi } from './api'
-import type { RadioSize, RadioType } from './types'
-import { RADIO_SIZE_VALUES, RADIO_TYPE_VALUES } from './types'
-import { uniqueElementId } from '../../util'
-import SRadioAtom from './SRadioAtom'
-import SRadioBody from './SRadioBody'
-import { usePropTypeFilter } from '../../composables/prop-type-filter'
-import { computed, ref } from 'vue'
-import { templateRef } from '@vueuse/core'
+import { useRadioGroupApi } from "./api";
+import type { RadioSize, RadioType } from "./types";
+import { RADIO_SIZE_VALUES, RADIO_TYPE_VALUES } from "./types";
+import { uniqueElementId } from "../../util";
+import SRadioAtom from "./SRadioAtom";
+import SRadioBody from "./SRadioBody";
+import { usePropTypeFilter } from "../../composables/prop-type-filter";
+import { computed, ref } from "vue";
+import { templateRef } from "@vueuse/core";
 
 interface Props {
-  value: any
-  disabled?: boolean
-  type?: RadioType
-  size?: RadioSize
+  value: any;
+  disabled?: boolean;
+  type?: RadioType;
+  size?: RadioSize;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
-  type: 'default',
-  size: 'md',
-})
+  type: "default",
+  size: "md",
+});
 
-const propFilter = usePropTypeFilter(props)
-const definitelyType = propFilter('type', RADIO_TYPE_VALUES, 'default')
-const definitelySize = propFilter('size', RADIO_SIZE_VALUES, 'md')
+const propFilter = usePropTypeFilter(props);
+const definitelyType = propFilter("type", RADIO_TYPE_VALUES, "default");
+const definitelySize = propFilter("size", RADIO_SIZE_VALUES, "md");
 
 const api = useRadioGroupApi().registerRadio({
   valueRef: computed(() => props.value),
   disabledRef: computed(() => props.disabled),
-  elRef: templateRef('root'),
-})
+  elRef: templateRef("root"),
+});
 
 // ETC
 
-const hover = ref(false)
+const hover = ref(false);
 
-const uniqueLabelId = uniqueElementId()
-const uniqueDescriptionId = uniqueElementId()
-const describedBy = computed(() => (definitelyType.value === 'bordered-with-description' ? uniqueDescriptionId : ''))
+const uniqueLabelId = uniqueElementId();
+const uniqueDescriptionId = uniqueElementId();
+const describedBy = computed(() =>
+  definitelyType.value === "bordered-with-description"
+    ? uniqueDescriptionId
+    : "",
+);
 </script>
 
 <template>
