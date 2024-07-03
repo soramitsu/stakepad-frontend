@@ -66,8 +66,8 @@ function onClickClose() {
   @apply flex space-x-4;
 
   @each $status in ("info", "warning", "success", "error") {
-    $bg: theme.token-as-var("sys.color.status.#{$status}-background");
-    $fg: theme.token-as-var("sys.color.status.#{$status}");
+    $bg: #ddf4dd;
+    $fg: #009900;
 
     &[data-status="#{$status}"] {
       background: $bg;

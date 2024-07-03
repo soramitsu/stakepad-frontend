@@ -4,6 +4,13 @@
   </main>
 </template>
 
+<script setup lang="ts">
+import { useIpfsStore } from "./stores/ipfs";
+
+const ipfsStore = useIpfsStore();
+ipfsStore.initialize();
+</script>
+
 <style>
 * {
   font-family: "Sora", sans-serif;

@@ -135,13 +135,15 @@
             <InputSlider
               class="my-[32px]"
               :value="poolData.lockupDays"
-              :min="0"
+              :min="1"
               :max="120"
               @input="(val) => (poolData.lockupDays = val)"
             ></InputSlider>
           </template>
 
-          <div class="flex flex-row gap-[16px]">
+          <div class="flex flex-row gap-[16px] justify-between">
+            <SButton type="outline" @click="step--"> Back </SButton>
+
             <SButton
               type="primary"
               :disabled="
@@ -156,32 +158,94 @@
             >
               Next step
             </SButton>
-
-            <SButton type="outline" @click="$emit('cancel')"> Cancel </SButton>
           </div>
         </template>
 
         <template v-if="step === PoolCreationStep.Info">
-          <STextField v-model="ipfsHash" label="IPFS Hash" class="mb-[16px]">
-          </STextField>
+          <STextField v-model="ipfsHash" label="IPFS Hash"> </STextField>
 
-          <h2 class="text-[14px] font-bold mb-[16px]">
-            {{ symbols.staking + " " + symbols.reward }} pool
-          </h2>
+          <template v-if="ipfsObj?.name && ipfsHash">
+            <h2 class="text-[14px] text-[#26292E] font-bold mt-[24px] mb-[8px]">
+              {{ ipfsObj.name }}
+            </h2>
 
-          <h2 class="text-[14px] font-bold mb-[8px]">Staking token address</h2>
+            <p class="text-[14px] text-[#26292E] mb-[16px]">
+              {{ ipfsObj.description }}
+            </p>
 
-          <p class="mb-[8px] text-[14px] flex flex-row items-center">
-            <span>{{ poolData.stakingToken }}</span>
-          </p>
+            <h2 class="text-[14px] text-[#26292E] font-bold mb-[8px]">
+              Staking token address
+            </h2>
 
-          <h2 class="text-[14px] font-bold">Reward token address</h2>
+            <TextCopy
+              :text="ipfsObj.stakingToken"
+              text-class="text-[14px] text-[#26292E]"
+              class="mb-[16px]"
+            />
 
-          <p class="mb-[8px] text-[14px] flex flex-row items-center">
-            <span>{{ poolData.rewardToken }}</span>
-          </p>
+            <h2 class="text-[14px] text-[#26292E] font-bold mb-[8px]">
+              Reward token address
+            </h2>
 
-          <div class="flex flex-row gap-[16px]">
+            <TextCopy
+              :text="ipfsObj.rewardToken"
+              text-class="text-[14px] text-[#26292E]"
+              class="mb-[16px]"
+            />
+
+            <div
+              class="flex flex-col gap-[8px] text-[14px] text-[#1070CA] underline"
+            >
+              <a :href="ipfsObj.stakingLink" 
+                target="_blank"> Get a staking token </a>
+              <a
+                v-if="ipfsObj?.socials?.website"
+                :href="ipfsObj?.socials?.website"
+                target="_blank"
+              >
+                Website
+              </a>
+              <a
+                v-if="ipfsObj?.socials?.medium"
+                :href="ipfsObj?.socials?.medium"
+                target="_blank"
+              >
+                Medium
+              </a>
+              <a
+                v-if="ipfsObj?.socials?.twitter"
+                :href="ipfsObj?.socials?.twitter"
+                target="_blank"
+              >
+                Twitter
+              </a>
+              <a
+                v-if="ipfsObj?.socials?.github"
+                :href="ipfsObj?.socials?.github"
+                target="_blank"
+              >
+                Github
+              </a>
+              <a
+                v-if="ipfsObj?.socials?.telegram"
+                :href="ipfsObj?.socials?.telegram"
+                target="_blank"
+              >
+                Telegram
+              </a>
+              <a
+                v-if="ipfsObj?.socials?.discord"
+                :href="ipfsObj?.socials?.discord"
+                target="_blank"
+              >
+                Discord
+              </a>
+            </div>
+          </template>
+
+          <div class="flex flex-row gap-[16px] justify-between mt-[32px]">
+            <SButton type="outline" @click="step--"> Back </SButton>
+
             <SButton
               type="primary"
               :disabled="
@@ -192,67 +256,67 @@
                   return acc;
                 }, false) as boolean
               "
-              @click="step++"
+              @click="estimateGas"
             >
               Next step
             </SButton>
-
-            <SButton type="outline" @click="$emit('cancel')"> Cancel </SButton>
           </div>
         </template>
 
         <template v-if="step === PoolCreationStep.Finish">
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Pool name</span>
-            <span></span>
+          <div class="flex flex-col gap-[8px] text-[14px] text-[#2D2926]">
+            <div class="flex justify-between">
+              <span>Pool name</span>
+              <span>{{ ipfsObj.name }}</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Staking token address</span>
+              <span><TextCopy :text="poolData.stakingToken" text-class="text-[14px] text-[#2D2926]" /></span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Reward token address</span>
+              <span><TextCopy :text="poolData.rewardToken" text-class="text-[14px] text-[#2D2926]" /></span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Reward per second</span>
+              <span>{{ poolData.rewardSecond + " " + symbols.reward }}</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Total reward</span>
+              <span>{{ poolData.totalReward + " " + symbols.reward }}</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Creator fee</span>
+              <span>4%</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>IPFS Hash</span>
+              <span class="underline text-[#1070CA]">{{ ipfsHash }}</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span>Gas fee</span>
+              <span>{{ gas }}</span>
+            </div>
           </div>
 
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Staking token address</span>
-            <span>{{ poolData.stakingToken }}</span>
-          </div>
+          <div class="flex flex-row gap-[16px] justify-between mt-[32px]">
+            <SButton type="outline" @click="step--"> Back </SButton>
 
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Reward token address</span>
-            <span>{{ poolData.rewardToken }}</span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Reward per second</span>
-            <span>{{ poolData.rewardSecond }}</span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Total reward</span>
-            <span>{{ poolData.totalReward }}</span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Start time – End time</span>
-            <span>{{ poolData.startTime + " -- " + poolData.endTime }}</span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Gas fee</span>
-            <span></span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>Creator fee</span>
-            <span></span>
-          </div>
-
-          <div class="flex justify-between text-[14px] mb-[8px]">
-            <span>IPFS Hash</span>
-            <span>{{ ipfsHash }}</span>
-          </div>
-
-          <div class="flex flex-row gap-[16px] mb-[8px]">
             <SButton type="primary" @click="step++">
               Request a pool creation
             </SButton>
-
-            <SButton type="outline" @click="$emit('cancel')"> Cancel </SButton>
           </div>
         </template>
 
@@ -264,7 +328,9 @@
           >
           </SAlert>
 
-          <SButton type="outline" @click="$emit('cancel')"> Cancel </SButton>
+          <SButton type="outline" class="mt-[24px]" @click="$emit('cancel')">
+            Ok
+          </SButton>
         </template>
       </template>
     </SModalCard>
@@ -287,10 +353,13 @@ import { EthersWrapper } from "@/wrapper";
 import SAlert from "./ui/ui-kit/components/Alert/SAlert.vue";
 import SDatePicker from "./ui/ui-kit/components/DatePicker/SDatePicker.vue";
 import InputSlider from "./ui/InputSlider.vue";
+import { useIpfsStore } from "@/stores/ipfs";
+import TextCopy from "./ui/TextCopy.vue";
 
 const step = ref(PoolCreationStep.Type);
 
 const ipfsHash = ref("");
+const ipfsObj = ref({} as any);
 
 const poolOptions = [
   {
@@ -322,7 +391,7 @@ const poolData = ref({
   endTime: undefined,
   isLockUp: false,
   lockupType: null,
-  lockupDays: 0,
+  lockupDays: 1,
 });
 
 const ethersWrapper = new EthersWrapper();
@@ -333,6 +402,19 @@ const moveToStep = (idxStep: number) => {
   if (idxStep <= latestStep.value) {
     step.value = idxStep;
   }
+};
+
+const gas = ref("");
+
+const estimateGas = async () => {
+  const provider = await ethersWrapper.getMetamaskProvider();
+  const contract = ethersWrapper.createContract(
+    poolData.value.rewardToken,
+    ERC20Abi,
+    provider,
+  );
+  gas.value = await ethersWrapper.getGasContract(provider, contract, poolData.value.rewardToken, '0x0');
+  step.value++;
 };
 
 watch(
@@ -400,6 +482,19 @@ watch(
           names.value.reward = "";
         });
     }
+  },
+);
+
+const ipfsStore = useIpfsStore();
+
+const getIpfs = async () => {
+  ipfsObj.value = await ipfsStore.getFile(ipfsHash.value);
+};
+
+watch(
+  () => ipfsHash.value,
+  () => {
+    if (ipfsHash.value) getIpfs();
   },
 );
 

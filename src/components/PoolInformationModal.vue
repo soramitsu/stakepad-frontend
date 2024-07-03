@@ -49,7 +49,11 @@
               class="mb-[16px]"
             >
               <template #append>
-                <img class="w-[24px] h-[24px]" :src="poolData.stakingImg" />
+                <img
+                  v-if="poolData.stakingImg.length > 8"
+                  class="w-[24px] h-[24px]"
+                  :src="poolData.stakingImg"
+                />
               </template>
             </STextField>
 
@@ -74,12 +78,18 @@
               class="mb-[16px]"
             >
               <template #append>
-                <img class="w-[24px] h-[24px]" :src="poolData.rewardImg" />
+                <img
+                  v-if="poolData.rewardImg.length > 8"
+                  class="w-[24px] h-[24px]"
+                  :src="poolData.rewardImg"
+                />
               </template>
             </STextField>
 
             <div class="flex flex-row gap-[16px] justify-end">
-              <SButton type="primary" @click="step++"> Next step </SButton>
+              <SButton type="primary" :disabled="!isValid" @click="step++">
+                Next step
+              </SButton>
             </div>
           </template>
 
@@ -138,7 +148,9 @@
             <div class="flex flex-row gap-[16px] justify-between">
               <SButton type="outline" @click="step--"> Back </SButton>
 
-              <SButton type="primary" @click="step++"> Next step </SButton>
+              <SButton type="primary" :disabled="!isValid" @click="step++">
+                Next step
+              </SButton>
             </div>
           </template>
 
@@ -167,7 +179,9 @@
             <div class="flex flex-row gap-[16px] justify-between">
               <SButton type="outline" @click="step--"> Back </SButton>
 
-              <SButton type="primary" @click="step++"> Publish </SButton>
+              <SButton type="primary" :disabled="!isValid" @click="step++">
+                Publish
+              </SButton>
             </div>
           </template>
 
@@ -180,9 +194,21 @@
             <div class="flex flex-row gap-[16px] justify-between">
               <SButton type="outline" @click="step--"> Back </SButton>
 
-              <SButton type="primary" @click="step++">
+              <SButton type="primary" @click="publishIpfs">
                 Confirm and publish
               </SButton>
+            </div>
+          </template>
+
+          <template v-if="step === PoolInfoStep.Hash">
+            <TextCopy
+              :text="ipfsHash"
+              class="mb-[16px]"
+              text-class="text-[14px] text-[#2D2926]"
+            >
+            </TextCopy>
+            <div class="flex flex-row gap-[16px]">
+              <SButton type="primary" @click="$emit('cancel')"> Ok </SButton>
             </div>
           </template>
         </ScrollBar>
@@ -191,7 +217,7 @@
   </SModal>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import SModal from "./ui/ui-kit/components/Modal/SModal.vue";
 import SModalCard from "./ui/ui-kit/components/Modal/SModalCard.vue";
 import { PoolInfoStep } from "@/types/enums";
@@ -201,8 +227,10 @@ import STextField from "./ui/ui-kit/components/TextField/STextField.vue";
 import ERC20Abi from "../abi/erc20.json";
 import { EthersWrapper } from "@/wrapper";
 import ScrollBar from "./ui/ScrollBar.vue";
+import TextCopy from "./ui/TextCopy.vue";
+import { useIpfsStore } from "@/stores/ipfs";
 
-const step = ref(PoolInfoStep.Type);
+const step = ref(PoolInfoStep.Pool);
 
 const ipfsHash = ref("");
 
@@ -259,6 +287,28 @@ const names = ref({
   reward: "",
 });
 
+const isValid = computed(() => {
+  switch (step.value) {
+    case PoolInfoStep.Pool:
+      return (
+        poolData.value.name &&
+        poolData.value.description &&
+        poolData.value.stakingToken &&
+        poolData.value.rewardToken
+      );
+    case PoolInfoStep.Socials:
+      return poolData.value.stakingLink;
+    case PoolInfoStep.Company:
+      return (
+        poolData.value.company.email &&
+        poolData.value.company.name &&
+        poolData.value.company.telegram
+      );
+    default:
+      return true;
+  }
+});
+
 watch(
   () => poolData.value.stakingToken,
   async () => {
@@ -269,7 +319,7 @@ watch(
         .then((e) => {
           symbols.value.staking = e;
         })
-        .catch(() => {
+        .catch((e) => {
           symbols.value.staking = "error";
         });
       ethersWrapper
@@ -314,4 +364,11 @@ defineProps<{
 }>();
 
 defineEmits(["cancel"]);
+
+const ipfsStore = useIpfsStore();
+
+const publishIpfs = async () => {
+  ipfsHash.value = await ipfsStore.addFile(poolData.value)
+  step.value++;
+};
 </script>

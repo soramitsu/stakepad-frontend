@@ -32,7 +32,7 @@
           </div>
 
           <div
-            class="rounded-[8px] bg-[#F3F6FF] p-[16px] text-[14px] text-[#26292E]"
+            class="flex flex-col gap-[8px] mb-[32px] rounded-[8px] bg-[#F3F6FF] p-[16px] text-[14px] text-[#26292E]"
           >
             <div class="flex justify-between">
               <span>{{
@@ -40,7 +40,7 @@
                   ? "Estimated earnings"
                   : "Remaining tokens"
               }}</span>
-              <span class="flex items-center">
+              <span class="flex items-center gap-[6px]">
                 <Token16 />
                 <span> 0 WETH </span>
               </span>

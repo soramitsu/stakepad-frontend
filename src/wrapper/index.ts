@@ -95,10 +95,12 @@ export class EthersWrapper {
   async getGasContract(
     provider: ethers.providers.JsonRpcProvider,
     contract: ethers.Contract,
+    to: string,
+    amount: string,
   ) {
-    const gasLimit = await contract.estimateGas.transfer();
+    const gasLimit = await contract.estimateGas.transfer(to, amount);
     const gasPrice = await provider.getGasPrice();
 
-    return new BN(gasPrice.toString()).mul(gasLimit.toString()).toString();
+    return new BN(gasPrice.toString()).mul(gasLimit.toString()).pow(10, -18).toString();
   }
 }
