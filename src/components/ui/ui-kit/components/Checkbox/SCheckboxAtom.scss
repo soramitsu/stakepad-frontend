@@ -8,19 +8,16 @@ $sizes: (
 );
 
 $border-radius: 3px;
-$color-disabled: theme.token-as-var("sys.color.disabled");
-$color-on-disabled: theme.token-as-var("sys.color.on-disabled");
-$color-primary: theme.token-as-var("sys.color.primary");
-$color-border-primary: theme.token-as-var("sys.color.border-primary");
-$color-border-secondary: theme.token-as-var("sys.color.border-secondary");
-$color-on-accent: theme.token-as-var(
-  "sys.color.content-on-background-inverted"
-);
+$color-disabled: #f5f7f8;
+$color-on-disabled: #a3a4a8;
+$color-primary: #d0021b;
+$color-border-primary: #dde0e1;
+$color-border-secondary: #eceff0;
+$color-on-accent: #fff;
 
 .s-checkbox-atom {
   @apply flex items-center justify-center;
 
-  border: 2px solid $color-border-primary;
   border-radius: $border-radius;
   transition:
     background 0.2s ease,

@@ -51,7 +51,6 @@ const hover = ref(false);
     :label-id="uniqueLabelId"
     :description-id="uniqueDescriptionId"
     :tabindex="disabled ? -1 : 0"
-    class="s-checkbox-atom"
     @click="toggleModel"
     @keypress.space="toggleModel"
     @mouseenter="hover = true"
@@ -60,7 +59,7 @@ const hover = ref(false);
     <template #atom>
       <SCheckboxAtom
         :checked="model"
-        :size="definitelySize"
+        :size="'xl'"
         :disabled="disabled"
         :hover="hover"
       />

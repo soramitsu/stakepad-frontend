@@ -1,6 +1,6 @@
-@use 'sass:string';
-@use 'sass:map';
-@use 'sass:list';
+@use "sass:string";
+@use "sass:map";
+@use "sass:list";
 
 @function str-replace($source, $target, $replacement) {
   $idx: string.index($source, $target);
@@ -19,7 +19,7 @@
 @function give-names-to-tokens($map, $prefix) {
   $acc: ();
   @each $key in map.keys($map) {
-    $var-name: $prefix + str-replace($key, '.', '_');
+    $var-name: $prefix + str-replace($key, ".", "_");
     $var-name: string.unquote($var-name);
     $acc: map.set($acc, $key, $var-name);
   }
@@ -28,21 +28,21 @@
 
 @function tree-flatten($tree) {
   $acc: ();
-  $acc: flat-walk($acc, $tree, '');
+  $acc: flat-walk($acc, $tree, "");
   @return $acc;
 }
 
 @function flat-walk($acc, $node, $current-path) {
   @each $key, $value in $node {
     $path: null;
-    @if $current-path == '' {
+    @if $current-path == "" {
       $path: $key;
     } @else {
-      $path: $current-path + '.' + $key;
+      $path: $current-path + "." + $key;
     }
 
     $ty: type-of($value);
-    @if $ty == 'map' {
+    @if $ty == "map" {
       // go deeper
       $acc: flat-walk($acc, $value, $path);
     } @else {

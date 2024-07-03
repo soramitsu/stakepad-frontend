@@ -11,9 +11,14 @@ export class EthersWrapper {
     return provider.getSigner();
   }
 
-  async getSymbol (abi: any, contractAddress: string, provider: any) {
-    const contract = new ethers.Contract(contractAddress, abi, provider)
-    return contract.symbol()
+  async getSymbol(abi: any, contractAddress: string, provider: any) {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    return contract.symbol();
+  }
+
+  async getName(abi: any, contractAddress: string, provider: any) {
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    return contract.name();
   }
 
   async getMetamaskProvider() {

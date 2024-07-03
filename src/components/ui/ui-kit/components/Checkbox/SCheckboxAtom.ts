@@ -1,7 +1,8 @@
 import "./SCheckboxAtom.scss";
 
-import IconCheck from "../icons/icomoon/circle-plus-16.svg"
-import IconMinus from "../icons/icomoon/circle-minus-16.svg";
+import IconCheck from "../../../../../assets/icons/checkbox_on.svg";
+import IconMinus from "@/assets/icons/checkbox_on.svg";
+import IconEmpty from "@/assets/icons/checkbox_off.svg";
 
 import type { FunctionalComponent, PropType } from "vue";
 import { h, mergeProps } from "vue";
@@ -13,9 +14,6 @@ interface Props {
   hover?: boolean;
   disabled?: boolean;
 }
-
-const IconEmpty = () =>
-  h("svg", { width: "1.2em", height: "1.2em" }, h("path"));
 
 const SCheckboxAtom: FunctionalComponent<Props> = (props, { attrs }) => {
   return h(
@@ -39,7 +37,7 @@ const SCheckboxAtom: FunctionalComponent<Props> = (props, { attrs }) => {
         ? props.checked === "mixed"
           ? h(IconMinus)
           : h(IconCheck)
-        : IconEmpty(),
+        : h(IconEmpty),
     ],
   );
 };

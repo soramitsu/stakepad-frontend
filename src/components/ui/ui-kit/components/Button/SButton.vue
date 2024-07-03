@@ -260,11 +260,26 @@ const font = computed(() => {
     $border-radius: 2px
   );
 
-  @include button-size(sm, $height: 32px, $padding: 0px 12px 0px 12px, $icon-size: 16px);
+  @include button-size(
+    sm,
+    $height: 32px,
+    $padding: 0px 12px 0px 12px,
+    $icon-size: 16px
+  );
 
-  @include button-size(md, $height: 40px, $padding: 0px 16px 0px 16px, $icon-size: 16px);
+  @include button-size(
+    md,
+    $height: 40px,
+    $padding: 0px 16px 0px 16px,
+    $icon-size: 16px
+  );
 
-  @include button-size(lg, $height: 56px, $padding: 0px 24px 0px 24px, $icon-size: 24px);
+  @include button-size(
+    lg,
+    $height: 56px,
+    $padding: 0px 24px 0px 24px,
+    $icon-size: 24px
+  );
 
   &_rounded {
     @apply rounded-full;

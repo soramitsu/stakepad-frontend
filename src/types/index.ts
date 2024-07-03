@@ -14,3 +14,8 @@ export type Pool = {
   accounts: number;
   staked_by_day: number;
 };
+
+export type Option = {
+  label: string;
+  value: string;
+};

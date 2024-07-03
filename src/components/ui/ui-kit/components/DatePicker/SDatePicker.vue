@@ -50,6 +50,7 @@ interface Props {
   disabled?: boolean;
   shortcuts?: DatePickerOptionsProp | false;
   dateFilter?: (d: Date) => boolean;
+  label?: string;
   min?: Date | null;
   max?: Date | null;
 }
@@ -59,6 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   shortcuts: () => DEFAULT_SHORTCUTS,
   dateFilter: () => true,
+  label: "",
   min: null,
   max: null,
 });
@@ -331,6 +333,17 @@ const changeView = (viewName: string) => {
   currentView.value = viewName;
 };
 
+const getTimeZone = () => {
+  const offset = new Date().getTimezoneOffset(),
+    o = Math.abs(offset);
+  return (
+    (offset < 0 ? "+" : "-") +
+    ("00" + Math.floor(o / 60)).slice(-2) +
+    ":" +
+    ("00" + (o % 60)).slice(-2)
+  );
+};
+
 const headTitle = computed(() => {
   if (appropriateMenuOption.value.value !== CUSTOM_OPTION_VALUE) {
     return appropriateMenuOption.value.label;
@@ -346,7 +359,15 @@ const headTitle = computed(() => {
       }
       case "pick": {
         const modelValue = innerModelValue.value as Date[];
-        return modelValue.map((item) => formatDate(item)).join(", ");
+        return (
+          [...modelValue]
+            .reverse()
+            .slice(0, 1)
+            .map((item) => formatDate(item))
+            .join(", ") +
+          ", GMT " +
+          getTimeZone()
+        );
       }
     }
 
@@ -543,12 +564,16 @@ watch(
             }"
           >
             <div
-              class="s-date-picker__header p-2 sora-tpg-ch2 relative pr-6"
-              :class="disabled ? 'cursor-default' : 'cursor-pointer'"
+              class="s-date-picker__header pl-[14px] p-2 relative s-date-picker__input-wrapper h-full flex flex-col justify-center"
+              :class="
+                (disabled ? 'cursor-default' : 'cursor-pointer') +
+                ' ' +
+                (headTitle ? 'sora-tpg-p4' : 'text-[14px] text-[#75787B]')
+              "
               @keydown="updateShow"
               @click="updateShow"
             >
-              {{ headTitle || "Date" }}
+              {{ headTitle || label || "Date" }}
               <div class="arrow" :class="arrowState">
                 <IconArrowsChevronBottom24 />
               </div>
@@ -606,10 +631,31 @@ watch(
 <style lang="scss">
 @use "../../theme";
 
+$height: 56px;
+$input-padding: 24px 16px 6px 16px;
+$label-top-primary: 16px;
+$label-top-secondary: 6px;
+$message-icon-alignment-fix: -1px;
+
+$theme-bg: #f5f7f8;
+$theme-bg-hover: #eceff0;
+$theme-border-primary: #dde0e1;
+$theme-content-tertiary: #75787b;
+
+.sora-tpg-p4 {
+  font-family: Sora;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 180%;
+  letter-spacing: 0;
+}
+
 .s-date-picker {
+  z-index: 10000;
+
   &__header {
     border-radius: 4px;
-    border: 1px solid theme.token-as-var("sys.color.border-primary");
+    border: 1px solid #dde0e1;
 
     .arrow {
       position: absolute;
@@ -627,16 +673,44 @@ watch(
     }
   }
 
+  &__input-wrapper {
+    background: $theme-bg;
+    @apply rounded border border-transparent;
+    @apply relative flex;
+    @apply transition-all;
+
+    min-height: $height;
+
+    &:hover:not(:focus-within) {
+      background: $theme-bg-hover;
+    }
+
+    &:focus-within {
+      border-color: $theme-border-primary;
+      @apply bg-transparent;
+    }
+
+    label {
+      color: $theme-content-tertiary;
+      @apply pointer-events-none;
+      @apply absolute top-0 left-4;
+      @apply transition-all;
+    }
+  }
+
   &__panels {
     display: grid;
-    background-color: theme.token-as-var("sys.color.util.surface");
+    background-color: #fff;
 
     grid-template-areas:
       "options calendars time"
       "options custom custom";
     max-height: 405px;
     border-radius: 4px;
-    box-shadow: theme.token-as-var("sys.shadow.dropdown");
+    box-shadow: (
+      0px 0px 4px rgba(45, 41, 38, 0.08),
+      0px 4px 16px rgba(45, 41, 38, 0.08)
+    );
     overflow: hidden;
 
     &_date {

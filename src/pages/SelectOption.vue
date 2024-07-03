@@ -1,6 +1,17 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full bg-[#2F2FA2]">
-    <CreationFormModal :show="showCreationModal" @cancel="showCreationModal = false" />
+    <CreationFormModal
+      :show="showCreationModal"
+      @cancel="showCreationModal = false"
+    />
+    <PoolInformationModal
+      :show="showInformationModal"
+      @cancel="showInformationModal = false"
+    />
+    <PoolInteractionModal
+      :show="showInteractionModal"
+      @cancel="showInteractionModal = false"
+    />
     <n-space>
       <div class="cursor-pointer" @click="showCreationModal = true">
         <n-card hoverable embedded class="w-[200px] h-[200px]">
@@ -10,10 +21,18 @@
         </n-card>
       </div>
 
-      <div class="cursor-pointer" @click="$router.push('/pools')">
+      <div class="cursor-pointer" @click="showInformationModal = true">
         <n-card hoverable embedded class="w-[200px] h-[200px]">
           <div class="flex flex-col text-center justify-between items-center">
-            <n-h2> Staking Pools </n-h2>
+            <n-h2> Pool info </n-h2>
+          </div>
+        </n-card>
+      </div>
+
+      <div class="cursor-pointer" @click="showInteractionModal = true">
+        <n-card hoverable embedded class="w-[200px] h-[200px]">
+          <div class="flex flex-col text-center justify-between items-center">
+            <n-h2> Interact with Pool </n-h2>
           </div>
         </n-card>
       </div>
@@ -30,8 +49,12 @@
 </template>
 <script setup lang="ts">
 import CreationFormModal from "@/components/CreationFormModal.vue";
+import PoolInformationModal from "@/components/PoolInformationModal.vue";
+import PoolInteractionModal from "@/components/PoolInteractionModal.vue";
 import { NCard, NSpace, NH2 } from "naive-ui";
 import { ref } from "vue";
 
-const showCreationModal = ref(false)
+const showCreationModal = ref(false);
+const showInformationModal = ref(false);
+const showInteractionModal = ref(false);
 </script>

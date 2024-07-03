@@ -307,8 +307,7 @@ const inputType = computed(() =>
           data-testid="eye"
           type="button"
           @click.stop="toggleForceReveal()"
-        >
-        </button>
+        ></button>
       </div>
     </div>
 

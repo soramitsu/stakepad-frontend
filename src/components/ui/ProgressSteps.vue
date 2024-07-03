@@ -1,12 +1,15 @@
 <template>
-  <div class="relative flex flex-row h-[44px] gap-[68px] mx-auto" :style="{ width: `${44 * length + 68 * (length - 1)}px` }">
+  <div
+    class="relative flex flex-row h-[36px] gap-[68px] mx-auto"
+    :style="{ width: `${36 * length + 68 * (length - 1)}px` }"
+  >
     <div
       class="absolute h-[1px] bg-[#FAE6E8] top-1/2 left-1/2 w-full -translate-x-1/2"
     ></div>
     <div
       v-for="idx in length"
       :key="String(idx)"
-      class="cursor-pointer z-10 text-[14px] rounded-[100%] w-[44px] h-[44px] text-center border-[1px] border-[#F1B3BB] flex items-center justify-center"
+      class="cursor-pointer z-10 text-[14px] rounded-[100%] w-[36px] h-[36px] text-center border-[1px] border-[#F1B3BB] flex items-center justify-center"
       :class="{
         'bg-[#D0021B] text-white': +currentStep === +idx,
         'bg-white text-[#F1B3BB]': +currentStep !== +idx,

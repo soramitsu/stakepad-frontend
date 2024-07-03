@@ -1,34 +1,34 @@
-import sass from 'sass'
-import path from 'path'
+import sass from "sass";
+import path from "path";
 
 function resolveUrl(relativePath: string): URL {
-  return new URL('file://' + path.resolve(__dirname, relativePath))
+  return new URL("file://" + path.resolve(__dirname, relativePath));
 }
 
-function compileInline(source: string, syntax: sass.Syntax = 'scss'): string {
+function compileInline(source: string, syntax: sass.Syntax = "scss"): string {
   const result = sass.compileString(source, {
     syntax,
     importers: [
       {
         findFileUrl: (url) => {
           switch (url) {
-            case 'v_lib':
-              return resolveUrl('../lib.scss')
-            case 'v_util':
-              return resolveUrl('../util.scss')
+            case "v_lib":
+              return resolveUrl("../lib.scss");
+            case "v_util":
+              return resolveUrl("../util.scss");
             default:
-              return null
+              return null;
           }
         },
       },
     ],
-  })
+  });
 
-  return result.css
+  return result.css;
 }
 
-describe('Exports', () => {
-  test('token-as-var() returns a correct variable name', () => {
+describe("Exports", () => {
+  test("token-as-var() returns a correct variable name", () => {
     expect(
       compileInline(
         `
@@ -36,16 +36,16 @@ describe('Exports', () => {
         body
           color: #{l.token-as-var('sys.color.primary')}
       `,
-        'indented',
+        "indented",
       ),
     ).toMatchInlineSnapshot(`
       "body {
         color: var(--sora_sys_color_primary);
       }"
-    `)
-  })
+    `);
+  });
 
-  test('eval-tokens() throws due to incompleteness of the tree', () => {
+  test("eval-tokens() throws due to incompleteness of the tree", () => {
     expect(() =>
       compileInline(`
         @use 'v_lib' as l;
@@ -61,10 +61,10 @@ describe('Exports', () => {
           );
         }
       `),
-    ).toThrowError(/Provided tokens data is incomplete/)
-  })
+    ).toThrowError(/Provided tokens data is incomplete/);
+  });
 
-  test('eval-tokens-partial() completes ok', () => {
+  test("eval-tokens-partial() completes ok", () => {
     expect(
       compileInline(`
         @use 'v_lib' as l;
@@ -84,10 +84,10 @@ describe('Exports', () => {
       ":root {
         --sora_sys_color_primary: red;
       }"
-    `)
-  })
+    `);
+  });
 
-  test('light tokens preset matches to snapshot', () => {
+  test("light tokens preset matches to snapshot", () => {
     expect(
       compileInline(`
         @use 'v_lib' as l;
@@ -143,8 +143,8 @@ describe('Exports', () => {
         --sora_sys_shadow_dropdown: 0px 0px 4px rgba(45, 41, 38, 0.08), 0px 4px 16px rgba(45, 41, 38, 0.08);
         --sora_sys_shadow_active-tab: 0px 1px 1px rgba(83, 86, 90, 0.1);
       }"
-    `)
-  })
+    `);
+  });
 
   test("typography('d2') succeeds", () => {
     expect(
@@ -160,17 +160,19 @@ describe('Exports', () => {
         font-family: Sora;
         font-size: 36px;
       }"
-    `)
-  })
+    `);
+  });
 
   test("typography('regulus') fails", () => {
-    expect(() => compileInline(`@use 'v_lib' as l; @include l.typography('regulus');`)).toThrowError(
-      /Wrong typography token: "regulus"/,
-    )
-  })
+    expect(() =>
+      compileInline(`@use 'v_lib' as l; @include l.typography('regulus');`),
+    ).toThrowError(/Wrong typography token: "regulus"/);
+  });
 
-  test('typography default preset matches snapshot', () => {
-    expect(compileInline(`@use 'v_lib' as l; @include l.typography-preset-default;`)).toMatchInlineSnapshot(`
+  test("typography default preset matches snapshot", () => {
+    expect(
+      compileInline(`@use 'v_lib' as l; @include l.typography-preset-default;`),
+    ).toMatchInlineSnapshot(`
       ".sora-tpg-d1 {
         font-family: Sora;
         font-size: 40px;
@@ -325,12 +327,12 @@ describe('Exports', () => {
         line-height: 16px;
         letter-spacing: 0;
       }"
-    `)
-  })
-})
+    `);
+  });
+});
 
-describe('Utils', () => {
-  test('full tokens tree evaluation - ok', () => {
+describe("Utils", () => {
+  test("full tokens tree evaluation - ok", () => {
     expect(
       compileInline(`
         @use 'v_util' as util;
@@ -354,10 +356,10 @@ describe('Utils', () => {
         --scp: red;
         --scs: blue;
       }"
-    `)
-  })
+    `);
+  });
 
-  test('full tokens tree evaluation - error if there are excessive tokens', () => {
+  test("full tokens tree evaluation - error if there are excessive tokens", () => {
     expect(() =>
       compileInline(`
         @use 'v_util' as util;
@@ -377,10 +379,10 @@ describe('Utils', () => {
           @include util.eval-tokens($src, $values)
         }
       `),
-    ).toThrowError(/excessive/)
-  })
+    ).toThrowError(/excessive/);
+  });
 
-  test('partial tokens tree evaluation - ok', () => {
+  test("partial tokens tree evaluation - ok", () => {
     expect(
       compileInline(`
         @use 'v_util' as util;
@@ -402,10 +404,10 @@ describe('Utils', () => {
       ":root {
         --scs: blue;
       }"
-    `)
-  })
+    `);
+  });
 
-  test('partial tokens tree evaluation - fails if there are excessive tokens', () => {
+  test("partial tokens tree evaluation - fails if there are excessive tokens", () => {
     expect(() =>
       compileInline(`
         @use 'v_util' as util;
@@ -423,11 +425,11 @@ describe('Utils', () => {
           @include util.eval-tokens($src, $values, true)
         }
     `),
-    ).toThrowError(/excessive/)
-  })
+    ).toThrowError(/excessive/);
+  });
 
-  describe('lists-diff', () => {
-    test('works correct if there are equal elements on 0 index', () => {
+  describe("lists-diff", () => {
+    test("works correct if there are equal elements on 0 index", () => {
       expect(
         compileInline(`
           @use 'v_util' as util;
@@ -439,7 +441,7 @@ describe('Utils', () => {
         "body {
           color: blue;
         }"
-      `)
-    })
-  })
-})
+      `);
+    });
+  });
+});

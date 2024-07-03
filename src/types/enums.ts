@@ -3,5 +3,13 @@ export enum PoolCreationStep {
   Data,
   Info,
   Finish,
-  Validation
+  Validation,
+}
+
+export enum PoolInfoStep {
+  Pool,
+  Socials,
+  Company,
+  Validation,
+  Hash,
 }

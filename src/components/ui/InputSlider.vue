@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="slider-component">
+    <div class="slider-component relative">
       <div class="slidecontainer">
         <input
           ref="input"
@@ -11,13 +11,14 @@
           class="slider"
           @input="onInput"
         />
+        <div class="sliderfull" :style="{ width: `${currentWidth}%` }"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
   value: number;
@@ -28,6 +29,8 @@ const props = defineProps<{
 const emit = defineEmits(["input"]);
 
 const currentValue = ref(props.value);
+
+const currentWidth = computed(() => (props.value / props.max) * 100);
 
 const onInput = () => {
   emit("input", parseInt(currentValue.value as unknown as string));
@@ -59,18 +62,25 @@ const onInput = () => {
 .slider-component .slidecontainer .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 12px;
+  height: 12px;
   background: #d0021b;
   cursor: pointer;
   border-radius: 50%;
 }
 
 .slider-component .slidecontainer .slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 12px;
+  height: 12px;
   background: #d0021b;
   cursor: pointer;
   border-radius: 50%;
+}
+
+.sliderfull {
+  background: #d0021b;
+  height: 4px;
+  position: absolute;
+  top: 10px;
 }
 </style>
