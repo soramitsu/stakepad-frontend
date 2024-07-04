@@ -45,7 +45,19 @@ export class EthersWrapper {
     amount: string,
   ) {
     const signedContract = contract.connect(signer);
-    return signedContract.transfer("ricmoo.firefly.eth", amount);
+    console.log(signedContract)
+    //return signedContract.transfer("ricmoo.firefly.eth", amount);
+  }
+
+  async getCurrentAccountMetamask() {
+    //@ts-ignore
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    return accounts[0];
+  }
+
+  async sendContractMethod(contract: ethers.Contract, method: string, account: any, args?: any) {
+    console.log(contract[method](...args))
+    return await contract[method](...args).send({ from: account })
   }
 
   sendTransaction(

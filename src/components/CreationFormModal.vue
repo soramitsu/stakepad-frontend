@@ -314,7 +314,7 @@
           <div class="flex flex-row gap-[16px] justify-between mt-[32px]">
             <SButton type="outline" @click="step--"> Back </SButton>
 
-            <SButton type="primary" @click="step++">
+            <SButton type="primary" @click="requestPool">
               Request a pool creation
             </SButton>
           </div>
@@ -349,6 +349,7 @@ import SRadioGroup from "./ui/ui-kit/components/Radio/SRadioGroup.vue";
 import SRadio from "./ui/ui-kit/components/Radio/SRadio.vue";
 import SCheckboxSolo from "./ui/ui-kit/components/Checkbox/SCheckboxSolo.vue";
 import ERC20Abi from "../abi/erc20.json";
+import PoolAbi from "../abi/pool.json";
 import { EthersWrapper } from "@/wrapper";
 import SAlert from "./ui/ui-kit/components/Alert/SAlert.vue";
 import SDatePicker from "./ui/ui-kit/components/DatePicker/SDatePicker.vue";
@@ -387,8 +388,8 @@ const poolData = ref({
   rewardToken: "",
   rewardSecond: "",
   totalReward: "",
-  startTime: undefined,
-  endTime: undefined,
+  startTime: undefined as unknown as Date[],
+  endTime: undefined as unknown as Date[],
   isLockUp: false,
   lockupType: null,
   lockupDays: 1,
@@ -484,6 +485,25 @@ watch(
     }
   },
 );
+
+const requestPool = async () => {
+  const provider = await ethersWrapper.getMetamaskProvider()
+  const account = await ethersWrapper.getCurrentAccountMetamask()
+  const contract = ethersWrapper.createContract('0x78AA3a23BF767f4a27F91bcCc267C1671e14C378', PoolAbi, provider)
+  //@ts-ignore
+  ethersWrapper.sendContractMethod(contract, 'requestDeployment' , account, [
+    ipfsHash.value,
+    {
+      stakeToken: poolData.value.stakingToken,
+      rewardToken: poolData.value.rewardSecond,
+      poolStartTime: poolData.value.startTime[0]?.getMilliseconds(),
+      poolEndTime: poolData.value.endTime[0]?.getMilliseconds(),
+      rewardPerSecond: poolData.value.rewardSecond,
+      unstakeLockUpTime: poolData.value.lockupDays * 24 * 60 * 60 * 1000,
+      claimLockUpTime: poolData.value.lockupDays * 24 * 60 * 60 * 1000,
+    }
+  ])
+}
 
 const ipfsStore = useIpfsStore();
 
